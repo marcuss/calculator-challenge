@@ -32,6 +32,10 @@
               <span v-text="$t('global.field.id')">ID</span>
               <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator>
             </th>
+            <th scope="row" v-on:click="changeOrder('active')">
+              <span v-text="$t('calculatorApp.record.active')">Active</span>
+              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'active'"></jhi-sort-indicator>
+            </th>
             <th scope="row" v-on:click="changeOrder('operationId')">
               <span v-text="$t('calculatorApp.record.operationId')">Operation Id</span>
               <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'operationId'"></jhi-sort-indicator>
@@ -64,6 +68,7 @@
             <td>
               <router-link :to="{ name: 'RecordView', params: { recordId: record.id } }">{{ record.id }}</router-link>
             </td>
+            <td>{{ record.active }}</td>
             <td v-text="$t('calculatorApp.Operator.' + record.operationId)">{{ record.operationId }}</td>
             <td>{{ record.amount }}</td>
             <td>{{ record.userBalance }}</td>

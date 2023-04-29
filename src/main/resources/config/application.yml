@@ -20,6 +20,9 @@ spring:
   config:
     activate:
       on-profile: '!api-docs'
+  data:
+      mongodb:
+        auto-index-creation: true
 springdoc:
   api-docs:
     enabled: false

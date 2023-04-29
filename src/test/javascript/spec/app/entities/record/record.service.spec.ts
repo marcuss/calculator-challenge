@@ -34,7 +34,7 @@ describe('Service Tests', () => {
     beforeEach(() => {
       service = new RecordService();
       currentDate = new Date();
-      elemDefault = new Record('ABC', Operator.ADD, 0, 0, 'AAAAAAA', currentDate);
+      elemDefault = new Record('ABC', false, Operator.ADD, 0, 0, 'AAAAAAA', currentDate);
     });
 
     describe('Service methods', () => {
@@ -97,6 +97,7 @@ describe('Service Tests', () => {
       it('should update a Record', async () => {
         const returnedFromService = Object.assign(
           {
+            active: true,
             operationId: 'BBBBBB',
             amount: 1,
             userBalance: 1,
@@ -133,9 +134,10 @@ describe('Service Tests', () => {
       it('should partial update a Record', async () => {
         const patchObject = Object.assign(
           {
+            active: true,
             operationId: 'BBBBBB',
             amount: 1,
-            userBalance: 1,
+            date: dayjs(currentDate).format(DATE_TIME_FORMAT),
           },
           new Record()
         );
@@ -168,6 +170,7 @@ describe('Service Tests', () => {
       it('should return a list of Record', async () => {
         const returnedFromService = Object.assign(
           {
+            active: true,
             operationId: 'BBBBBB',
             amount: 1,
             userBalance: 1,

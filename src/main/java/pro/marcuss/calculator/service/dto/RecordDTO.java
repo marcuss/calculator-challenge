@@ -14,6 +14,8 @@ public class RecordDTO implements Serializable {
 
     private String id;
 
+    private Boolean active;
+
     private Operator operationId;
 
     @NotNull
@@ -36,6 +38,14 @@ public class RecordDTO implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Boolean getActive() {
+        return active;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public Operator getOperationId() {
@@ -112,6 +122,7 @@ public class RecordDTO implements Serializable {
     public String toString() {
         return "RecordDTO{" +
             "id='" + getId() + "'" +
+            ", active='" + getActive() + "'" +
             ", operationId='" + getOperationId() + "'" +
             ", amount=" + getAmount() +
             ", userBalance=" + getUserBalance() +

@@ -14,6 +14,7 @@ import { Operator } from '@/shared/model/enumerations/operator.model';
 
 const validations: any = {
   record: {
+    active: {},
     operationId: {},
     amount: {
       required,

@@ -7,6 +7,12 @@
         </h2>
         <dl class="row jh-entity-details">
           <dt>
+            <span v-text="$t('calculatorApp.record.active')">Active</span>
+          </dt>
+          <dd>
+            <span>{{ record.active }}</span>
+          </dd>
+          <dt>
             <span v-text="$t('calculatorApp.record.operationId')">Operation Id</span>
           </dt>
           <dd>

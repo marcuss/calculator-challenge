@@ -21,6 +21,9 @@ public class Record implements Serializable {
     @Id
     private String id;
 
+    @Field("active")
+    private Boolean active = true;
+
     @Field("operation_id")
     private Operator operationId;
 
@@ -57,6 +60,19 @@ public class Record implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public Boolean getActive() {
+        return this.active;
+    }
+
+    public Record active(Boolean active) {
+        this.setActive(active);
+        return this;
+    }
+
+    public void setActive(Boolean active) {
+        this.active = active;
     }
 
     public Operator getOperationId() {
@@ -161,6 +177,7 @@ public class Record implements Serializable {
     public String toString() {
         return "Record{" +
             "id=" + getId() +
+            ", active='" + getActive() + "'" +
             ", operationId='" + getOperationId() + "'" +
             ", amount=" + getAmount() +
             ", userBalance=" + getUserBalance() +

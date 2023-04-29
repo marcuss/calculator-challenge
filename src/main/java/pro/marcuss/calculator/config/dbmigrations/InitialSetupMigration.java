@@ -9,7 +9,9 @@ import java.util.List;
 import java.util.Random;
 import java.util.stream.Collectors;
 
+import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
+import org.springframework.data.mongodb.core.index.Index;
 import pro.marcuss.calculator.config.Constants;
 import pro.marcuss.calculator.domain.Authority;
 import pro.marcuss.calculator.domain.Operation;
@@ -31,6 +33,9 @@ public class InitialSetupMigration {
 
     @Execution
     public void changeSet() {
+        //programatically enforcing the creation fo unique indexes
+        template.indexOps("operation").
+            ensureIndex(new Index("operator", Sort.Direction.ASC).unique());
         Authority userAuthority = createUserAuthority();
         userAuthority = template.save(userAuthority);
         Authority adminAuthority = createAdminAuthority();

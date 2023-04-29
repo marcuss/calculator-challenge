@@ -5,11 +5,12 @@ enum Operator {
 
 entity Operation {
     id String,
-        operator Operator required,
+        operator Operator required unique,
         cost Double required min(0)
 }
 entity Record {
     id String,
+        active Boolean,
         operationId Operator,
         amount Double required min(0),
         userBalance Double required,

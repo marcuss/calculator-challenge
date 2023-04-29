@@ -31,6 +31,9 @@ import pro.marcuss.calculator.service.mapper.RecordMapper;
 @WithMockUser
 class RecordResourceIT {
 
+    private static final Boolean DEFAULT_ACTIVE = true;
+    private static final Boolean UPDATED_ACTIVE = false;
+
     private static final Operator DEFAULT_OPERATION_ID = Operator.ADD;
     private static final Operator UPDATED_OPERATION_ID = Operator.SUBSTRACT;
 
@@ -68,6 +71,7 @@ class RecordResourceIT {
      */
     public static Record createEntity() {
         Record record = new Record()
+            .active(DEFAULT_ACTIVE)
             .operationId(DEFAULT_OPERATION_ID)
             .amount(DEFAULT_AMOUNT)
             .userBalance(DEFAULT_USER_BALANCE)
@@ -84,6 +88,7 @@ class RecordResourceIT {
      */
     public static Record createUpdatedEntity() {
         Record record = new Record()
+            .active(UPDATED_ACTIVE)
             .operationId(UPDATED_OPERATION_ID)
             .amount(UPDATED_AMOUNT)
             .userBalance(UPDATED_USER_BALANCE)
@@ -111,6 +116,7 @@ class RecordResourceIT {
         List<Record> recordList = recordRepository.findAll();
         assertThat(recordList).hasSize(databaseSizeBeforeCreate + 1);
         Record testRecord = recordList.get(recordList.size() - 1);
+        assertThat(testRecord.getActive()).isEqualTo(DEFAULT_ACTIVE);
         assertThat(testRecord.getOperationId()).isEqualTo(DEFAULT_OPERATION_ID);
         assertThat(testRecord.getAmount()).isEqualTo(DEFAULT_AMOUNT);
         assertThat(testRecord.getUserBalance()).isEqualTo(DEFAULT_USER_BALANCE);
@@ -199,6 +205,7 @@ class RecordResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(record.getId())))
+            .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())))
             .andExpect(jsonPath("$.[*].operationId").value(hasItem(DEFAULT_OPERATION_ID.toString())))
             .andExpect(jsonPath("$.[*].amount").value(hasItem(DEFAULT_AMOUNT.doubleValue())))
             .andExpect(jsonPath("$.[*].userBalance").value(hasItem(DEFAULT_USER_BALANCE.doubleValue())))
@@ -218,6 +225,7 @@ class RecordResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(record.getId()))
+            .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()))
             .andExpect(jsonPath("$.operationId").value(DEFAULT_OPERATION_ID.toString()))
             .andExpect(jsonPath("$.amount").value(DEFAULT_AMOUNT.doubleValue()))
             .andExpect(jsonPath("$.userBalance").value(DEFAULT_USER_BALANCE.doubleValue()))
@@ -242,6 +250,7 @@ class RecordResourceIT {
         // Update the record
         Record updatedRecord = recordRepository.findById(record.getId()).get();
         updatedRecord
+            .active(UPDATED_ACTIVE)
             .operationId(UPDATED_OPERATION_ID)
             .amount(UPDATED_AMOUNT)
             .userBalance(UPDATED_USER_BALANCE)
@@ -261,6 +270,7 @@ class RecordResourceIT {
         List<Record> recordList = recordRepository.findAll();
         assertThat(recordList).hasSize(databaseSizeBeforeUpdate);
         Record testRecord = recordList.get(recordList.size() - 1);
+        assertThat(testRecord.getActive()).isEqualTo(UPDATED_ACTIVE);
         assertThat(testRecord.getOperationId()).isEqualTo(UPDATED_OPERATION_ID);
         assertThat(testRecord.getAmount()).isEqualTo(UPDATED_AMOUNT);
         assertThat(testRecord.getUserBalance()).isEqualTo(UPDATED_USER_BALANCE);
@@ -342,7 +352,7 @@ class RecordResourceIT {
         Record partialUpdatedRecord = new Record();
         partialUpdatedRecord.setId(record.getId());
 
-        partialUpdatedRecord.operationRespose(UPDATED_OPERATION_RESPOSE);
+        partialUpdatedRecord.userBalance(UPDATED_USER_BALANCE);
 
         restRecordMockMvc
             .perform(
@@ -356,10 +366,11 @@ class RecordResourceIT {
         List<Record> recordList = recordRepository.findAll();
         assertThat(recordList).hasSize(databaseSizeBeforeUpdate);
         Record testRecord = recordList.get(recordList.size() - 1);
+        assertThat(testRecord.getActive()).isEqualTo(DEFAULT_ACTIVE);
         assertThat(testRecord.getOperationId()).isEqualTo(DEFAULT_OPERATION_ID);
         assertThat(testRecord.getAmount()).isEqualTo(DEFAULT_AMOUNT);
-        assertThat(testRecord.getUserBalance()).isEqualTo(DEFAULT_USER_BALANCE);
-        assertThat(testRecord.getOperationRespose()).isEqualTo(UPDATED_OPERATION_RESPOSE);
+        assertThat(testRecord.getUserBalance()).isEqualTo(UPDATED_USER_BALANCE);
+        assertThat(testRecord.getOperationRespose()).isEqualTo(DEFAULT_OPERATION_RESPOSE);
         assertThat(testRecord.getDate()).isEqualTo(DEFAULT_DATE);
     }
 
@@ -376,6 +387,7 @@ class RecordResourceIT {
         partialUpdatedRecord.setId(record.getId());
 
         partialUpdatedRecord
+            .active(UPDATED_ACTIVE)
             .operationId(UPDATED_OPERATION_ID)
             .amount(UPDATED_AMOUNT)
             .userBalance(UPDATED_USER_BALANCE)
@@ -394,6 +406,7 @@ class RecordResourceIT {
         List<Record> recordList = recordRepository.findAll();
         assertThat(recordList).hasSize(databaseSizeBeforeUpdate);
         Record testRecord = recordList.get(recordList.size() - 1);
+        assertThat(testRecord.getActive()).isEqualTo(UPDATED_ACTIVE);
         assertThat(testRecord.getOperationId()).isEqualTo(UPDATED_OPERATION_ID);
         assertThat(testRecord.getAmount()).isEqualTo(UPDATED_AMOUNT);
         assertThat(testRecord.getUserBalance()).isEqualTo(UPDATED_USER_BALANCE);

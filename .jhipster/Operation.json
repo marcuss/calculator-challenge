@@ -1,6 +1,6 @@
 {
   "applications": "*",
-  "changelogDate": "20230429184106",
+  "changelogDate": "20230429224504",
   "dto": "mapstruct",
   "embedded": false,
   "entityTableName": "operation",
@@ -12,7 +12,7 @@
     {
       "fieldName": "operator",
       "fieldType": "Operator",
-      "fieldValidateRules": ["required"],
+      "fieldValidateRules": ["required", "unique"],
       "fieldValues": "ADD,SUBSTRACT,MULTIPLY,DIVIDE,SQROOT,RANDOM_STRING"
     },
     {

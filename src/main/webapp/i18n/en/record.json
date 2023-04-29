@@ -18,6 +18,7 @@
         "title": "Record"
       },
       "id": "Id",
+      "active": "Active",
       "operationId": "Operation Id",
       "amount": "Amount",
       "userBalance": "User Balance",

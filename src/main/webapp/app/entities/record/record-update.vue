@@ -15,6 +15,18 @@
             <input type="text" class="form-control" id="id" name="id" v-model="record.id" readonly />
           </div>
           <div class="form-group">
+            <label class="form-control-label" v-text="$t('calculatorApp.record.active')" for="record-active">Active</label>
+            <input
+              type="checkbox"
+              class="form-check"
+              name="active"
+              id="record-active"
+              data-cy="active"
+              :class="{ valid: !$v.record.active.$invalid, invalid: $v.record.active.$invalid }"
+              v-model="$v.record.active.$model"
+            />
+          </div>
+          <div class="form-group">
             <label class="form-control-label" v-text="$t('calculatorApp.record.operationId')" for="record-operationId">Operation Id</label>
             <select
               class="form-control"
