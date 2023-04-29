@@ -1,0 +1,30 @@
+enum Operator {
+    ADD, SUBSTRACT, MULTIPLY, DIVIDE, SQROOT, RANDOM_STRING
+}
+
+entity Operation {
+    id String,
+        operator Operator required,
+        cost Double required min(0)
+}
+entity Record {
+    id String,
+        operationId Operator,
+        amount Double required min(0),
+        userBalance Double required,
+        operationRespose String required,
+        date Instant
+}
+
+relationship OneToOne {
+    Record{userId} to User
+}
+
+// Set pagination options
+paginate Record, Operation with pagination
+
+// Use Data Transfer Objects (DTO)
+    dto * with mapstruct
+
+// Set service options to all except few
+    service all with serviceImpl

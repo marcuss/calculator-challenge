@@ -1,0 +1,25 @@
+{
+  "calculatorApp": {
+    "operation": {
+      "home": {
+        "title": "Operations",
+        "refreshListLabel": "Refrescar lista",
+        "createLabel": "Crear nuevo Operation",
+        "createOrEditLabel": "Crear o editar Operation",
+        "notFound": "Ningún Operations encontrado"
+      },
+      "created": "Un nuevo Operation ha sido creado con el identificador {{ param }}",
+      "updated": "Un Operation ha sido actualizado con el identificador {{ param }}",
+      "deleted": "Un Operation ha sido eliminado con el identificador {{ param }}",
+      "delete": {
+        "question": "¿Seguro que quiere eliminar Operation {{ id }}?"
+      },
+      "detail": {
+        "title": "Operation"
+      },
+      "id": "Id",
+      "operator": "Operator",
+      "cost": "Cost"
+    }
+  }
+}

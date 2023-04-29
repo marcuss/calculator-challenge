@@ -1,0 +1,13 @@
+export enum Operator {
+  ADD = 'ADD',
+
+  SUBSTRACT = 'SUBSTRACT',
+
+  MULTIPLY = 'MULTIPLY',
+
+  DIVIDE = 'DIVIDE',
+
+  SQROOT = 'SQROOT',
+
+  RANDOM_STRING = 'RANDOM_STRING',
+}

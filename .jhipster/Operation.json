@@ -1,0 +1,32 @@
+{
+  "applications": "*",
+  "changelogDate": "20230429184106",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "operation",
+  "fields": [
+    {
+      "fieldName": "id",
+      "fieldType": "String"
+    },
+    {
+      "fieldName": "operator",
+      "fieldType": "Operator",
+      "fieldValidateRules": ["required"],
+      "fieldValues": "ADD,SUBSTRACT,MULTIPLY,DIVIDE,SQROOT,RANDOM_STRING"
+    },
+    {
+      "fieldName": "cost",
+      "fieldType": "Double",
+      "fieldValidateRules": ["required", "min"],
+      "fieldValidateRulesMin": "0"
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "Operation",
+  "pagination": "pagination",
+  "readOnly": false,
+  "relationships": [],
+  "service": "serviceImpl"
+}
