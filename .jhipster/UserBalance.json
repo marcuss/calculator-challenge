@@ -1,0 +1,28 @@
+{
+  "applications": "*",
+  "changelogDate": "20230429215218",
+  "dto": "mapstruct",
+  "embedded": false,
+  "entityTableName": "user_balance",
+  "fields": [
+    {
+      "fieldName": "balance",
+      "fieldType": "Double",
+      "fieldValidateRules": ["required"]
+    }
+  ],
+  "fluentMethods": true,
+  "jpaMetamodelFiltering": false,
+  "name": "UserBalance",
+  "pagination": "no",
+  "readOnly": false,
+  "relationships": [
+    {
+      "otherEntityName": "user",
+      "ownerSide": true,
+      "relationshipName": "user",
+      "relationshipType": "one-to-one"
+    }
+  ],
+  "service": "serviceImpl"
+}
