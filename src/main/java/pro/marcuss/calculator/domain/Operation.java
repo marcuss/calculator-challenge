@@ -2,8 +2,6 @@ package pro.marcuss.calculator.domain;
 
 import java.io.Serializable;
 import javax.validation.constraints.*;
-
-import lombok.Builder;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -99,5 +97,4 @@ public class Operation implements Serializable {
             ", cost=" + getCost() +
             "}";
     }
-
 }

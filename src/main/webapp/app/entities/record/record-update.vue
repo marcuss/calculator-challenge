@@ -115,11 +115,11 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="$t('calculatorApp.record.userId')" for="record-userId">User Id</label>
-            <select class="form-control" id="record-userId" data-cy="userId" name="userId" v-model="record.userId">
+            <label class="form-control-label" v-text="$t('calculatorApp.record.user')" for="record-user">User</label>
+            <select class="form-control" id="record-user" data-cy="user" name="user" v-model="record.user">
               <option v-bind:value="null"></option>
               <option
-                v-bind:value="record.userId && userOption.id === record.userId.id ? record.userId : userOption"
+                v-bind:value="record.user && userOption.id === record.user.id ? record.user : userOption"
                 v-for="userOption in users"
                 :key="userOption.id"
               >

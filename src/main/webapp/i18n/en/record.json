@@ -23,7 +23,7 @@
       "userBalance": "User Balance",
       "operationRespose": "Operation Respose",
       "date": "Date",
-      "userId": "User Id"
+      "user": "User"
     }
   }
 }

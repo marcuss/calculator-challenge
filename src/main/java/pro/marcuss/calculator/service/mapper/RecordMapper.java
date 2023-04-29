@@ -11,7 +11,7 @@ import pro.marcuss.calculator.service.dto.UserDTO;
  */
 @Mapper(componentModel = "spring")
 public interface RecordMapper extends EntityMapper<RecordDTO, Record> {
-    @Mapping(target = "userId", source = "userId", qualifiedByName = "userId")
+    @Mapping(target = "user", source = "user", qualifiedByName = "userId")
     RecordDTO toDto(Record s);
 
     @Named("userId")

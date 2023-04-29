@@ -8,7 +8,7 @@ export interface IRecord {
   userBalance?: number;
   operationRespose?: string;
   date?: Date | null;
-  userId?: IUser | null;
+  user?: IUser | null;
 }
 
 export class Record implements IRecord {
@@ -19,6 +19,6 @@ export class Record implements IRecord {
     public userBalance?: number,
     public operationRespose?: string,
     public date?: Date | null,
-    public userId?: IUser | null
+    public user?: IUser | null
   ) {}
 }

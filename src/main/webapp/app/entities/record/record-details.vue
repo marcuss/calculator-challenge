@@ -37,10 +37,10 @@
             <span v-if="record.date">{{ $d(Date.parse(record.date), 'long') }}</span>
           </dd>
           <dt>
-            <span v-text="$t('calculatorApp.record.userId')">User Id</span>
+            <span v-text="$t('calculatorApp.record.user')">User</span>
           </dt>
           <dd>
-            {{ record.userId ? record.userId.id : '' }}
+            {{ record.user ? record.user.id : '' }}
           </dd>
         </dl>
         <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

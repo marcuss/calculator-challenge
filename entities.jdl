@@ -1,3 +1,4 @@
+
 enum Operator {
     ADD, SUBSTRACT, MULTIPLY, DIVIDE, SQROOT, RANDOM_STRING
 }
@@ -16,10 +17,14 @@ entity Record {
         date Instant
 }
 
-relationship OneToOne {
-    Record{userId} to User
+entity UserBalance {
+    balance Double required
 }
 
+relationship OneToOne {
+    Record{user} to User,
+        UserBalance{user} to User
+}
 // Set pagination options
 paginate Record, Operation with pagination
 

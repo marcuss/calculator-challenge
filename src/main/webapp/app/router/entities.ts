@@ -15,6 +15,12 @@ const Record = () => import('@/entities/record/record.vue');
 const RecordUpdate = () => import('@/entities/record/record-update.vue');
 // prettier-ignore
 const RecordDetails = () => import('@/entities/record/record-details.vue');
+// prettier-ignore
+const UserBalance = () => import('@/entities/user-balance/user-balance.vue');
+// prettier-ignore
+const UserBalanceUpdate = () => import('@/entities/user-balance/user-balance-update.vue');
+// prettier-ignore
+const UserBalanceDetails = () => import('@/entities/user-balance/user-balance-details.vue');
 // jhipster-needle-add-entity-to-router-import - JHipster will import entities to the router here
 
 export default {
@@ -67,6 +73,30 @@ export default {
       path: 'record/:recordId/view',
       name: 'RecordView',
       component: RecordDetails,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'user-balance',
+      name: 'UserBalance',
+      component: UserBalance,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'user-balance/new',
+      name: 'UserBalanceCreate',
+      component: UserBalanceUpdate,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'user-balance/:userBalanceId/edit',
+      name: 'UserBalanceEdit',
+      component: UserBalanceUpdate,
+      meta: { authorities: [Authority.USER] },
+    },
+    {
+      path: 'user-balance/:userBalanceId/view',
+      name: 'UserBalanceView',
+      component: UserBalanceDetails,
       meta: { authorities: [Authority.USER] },
     },
     // jhipster-needle-add-entity-to-router - JHipster will add entities to the router here

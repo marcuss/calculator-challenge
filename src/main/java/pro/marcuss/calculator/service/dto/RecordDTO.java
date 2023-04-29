@@ -28,7 +28,7 @@ public class RecordDTO implements Serializable {
 
     private Instant date;
 
-    private UserDTO userId;
+    private UserDTO user;
 
     public String getId() {
         return id;
@@ -78,12 +78,12 @@ public class RecordDTO implements Serializable {
         this.date = date;
     }
 
-    public UserDTO getUserId() {
-        return userId;
+    public UserDTO getUser() {
+        return user;
     }
 
-    public void setUserId(UserDTO userId) {
-        this.userId = userId;
+    public void setUser(UserDTO user) {
+        this.user = user;
     }
 
     @Override
@@ -117,7 +117,7 @@ public class RecordDTO implements Serializable {
             ", userBalance=" + getUserBalance() +
             ", operationRespose='" + getOperationRespose() + "'" +
             ", date='" + getDate() + "'" +
-            ", userId=" + getUserId() +
+            ", user=" + getUser() +
             "}";
     }
 }

@@ -52,9 +52,9 @@
               <span v-text="$t('calculatorApp.record.date')">Date</span>
               <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'date'"></jhi-sort-indicator>
             </th>
-            <th scope="row" v-on:click="changeOrder('userId.id')">
-              <span v-text="$t('calculatorApp.record.userId')">User Id</span>
-              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'userId.id'"></jhi-sort-indicator>
+            <th scope="row" v-on:click="changeOrder('user.id')">
+              <span v-text="$t('calculatorApp.record.user')">User</span>
+              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'user.id'"></jhi-sort-indicator>
             </th>
             <th scope="row"></th>
           </tr>
@@ -70,7 +70,7 @@
             <td>{{ record.operationRespose }}</td>
             <td>{{ record.date ? $d(Date.parse(record.date), 'short') : '' }}</td>
             <td>
-              {{ record.userId ? record.userId.id : '' }}
+              {{ record.user ? record.user.id : '' }}
             </td>
             <td class="text-right">
               <div class="btn-group">

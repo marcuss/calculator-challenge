@@ -41,8 +41,8 @@ public class Record implements Serializable {
     private Instant date;
 
     @DBRef
-    @Field("userId")
-    private User userId;
+    @Field("user")
+    private User user;
 
     // jhipster-needle-entity-add-field - JHipster will add fields here
 
@@ -124,16 +124,16 @@ public class Record implements Serializable {
         this.date = date;
     }
 
-    public User getUserId() {
-        return this.userId;
+    public User getUser() {
+        return this.user;
     }
 
-    public void setUserId(User user) {
-        this.userId = user;
+    public void setUser(User user) {
+        this.user = user;
     }
 
-    public Record userId(User user) {
-        this.setUserId(user);
+    public Record user(User user) {
+        this.setUser(user);
         return this;
     }
 

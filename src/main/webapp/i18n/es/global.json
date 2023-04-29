@@ -9,6 +9,7 @@
         "main": "Entidades",
         "operation": "Operation",
         "record": "Record",
+        "userBalance": "Usuario",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {
