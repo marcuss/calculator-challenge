@@ -29,7 +29,6 @@ public class Record implements Serializable {
     private Operator operationId;
 
     @NotNull
-    @DecimalMin(value = "0")
     @Field("amount")
     private Double amount;
 
@@ -38,8 +37,8 @@ public class Record implements Serializable {
     private Double userBalance;
 
     @NotNull
-    @Field("operation_respose")
-    private String operationRespose;
+    @Field("operation_response")
+    private String operationResponse;
 
     @Field("date")
     private Instant date;
@@ -115,17 +114,17 @@ public class Record implements Serializable {
         this.userBalance = userBalance;
     }
 
-    public String getOperationRespose() {
-        return this.operationRespose;
+    public String getOperationResponse() {
+        return this.operationResponse;
     }
 
-    public Record operationRespose(String operationRespose) {
-        this.setOperationRespose(operationRespose);
+    public Record operationResponse(String operationResponse) {
+        this.setOperationResponse(operationResponse);
         return this;
     }
 
-    public void setOperationRespose(String operationRespose) {
-        this.operationRespose = operationRespose;
+    public void setOperationResponse(String operationResponse) {
+        this.operationResponse = operationResponse;
     }
 
     public Instant getDate() {
@@ -182,7 +181,7 @@ public class Record implements Serializable {
             ", operationId='" + getOperationId() + "'" +
             ", amount=" + getAmount() +
             ", userBalance=" + getUserBalance() +
-            ", operationRespose='" + getOperationRespose() + "'" +
+            ", operationResponse='" + getOperationResponse() + "'" +
             ", date='" + getDate() + "'" +
             "}";
     }

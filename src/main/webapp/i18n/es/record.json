@@ -22,7 +22,7 @@
       "operationId": "Id de Operation",
       "amount": "Cantidad",
       "userBalance": "Balance",
-      "operationRespose": "Respuesta",
+      "operationResponse": "Respuesta",
       "date": "Fecha/Hora",
       "user": "Usuario"
     }

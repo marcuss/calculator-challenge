@@ -31,10 +31,10 @@
             <span>{{ record.userBalance }}</span>
           </dd>
           <dt>
-            <span v-text="$t('calculatorApp.record.operationRespose')">Operation Respose</span>
+            <span v-text="$t('calculatorApp.record.operationResponse')">Operation Response</span>
           </dt>
           <dd>
-            <span>{{ record.operationRespose }}</span>
+            <span>{{ record.operationResponse }}</span>
           </dd>
           <dt>
             <span v-text="$t('calculatorApp.record.date')">Date</span>

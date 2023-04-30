@@ -48,9 +48,9 @@
               <span v-text="$t('calculatorApp.record.userBalance')">User Balance</span>
               <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'userBalance'"></jhi-sort-indicator>
             </th>
-            <th scope="row" v-on:click="changeOrder('operationRespose')">
-              <span v-text="$t('calculatorApp.record.operationRespose')">Operation Respose</span>
-              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'operationRespose'"></jhi-sort-indicator>
+            <th scope="row" v-on:click="changeOrder('operationResponse')">
+              <span v-text="$t('calculatorApp.record.operationResponse')">Operation Response</span>
+              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'operationResponse'"></jhi-sort-indicator>
             </th>
             <th scope="row" v-on:click="changeOrder('date')">
               <span v-text="$t('calculatorApp.record.date')">Date</span>
@@ -72,7 +72,7 @@
             <td v-text="$t('calculatorApp.Operator.' + record.operationId)">{{ record.operationId }}</td>
             <td>{{ record.amount }}</td>
             <td>{{ record.userBalance }}</td>
-            <td>{{ record.operationRespose }}</td>
+            <td>{{ record.operationResponse }}</td>
             <td>{{ record.date ? $d(Date.parse(record.date), 'short') : '' }}</td>
             <td>
               {{ record.user ? record.user.id : '' }}

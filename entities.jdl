@@ -4,33 +4,33 @@ enum Operator {
 }
 
 entity Operation {
-    id String,
-        operator Operator required unique,
-        cost Double required min(0)
+	id String,
+    operator Operator required unique,
+    cost Double required min(0)
 }
 entity Record {
-    id String,
-        active Boolean required,
-        operationId Operator,
-        amount Double required min(0),
-        userBalance Double required,
-        operationRespose String required,
-        date Instant
+	id String,
+    active Boolean required,
+    operationId Operator,
+    amount Double required,
+    userBalance Double required,
+    operationResponse String required,
+    date Instant
 }
 
 entity UserBalance {
-    balance Double required
+	balance Double required
 }
 
 relationship OneToOne {
     Record{user} to User,
-        UserBalance{user} to User
+    UserBalance{user} to User
 }
 // Set pagination options
 paginate Record, Operation with pagination
 
 // Use Data Transfer Objects (DTO)
-    dto * with mapstruct
+dto * with mapstruct
 
 // Set service options to all except few
-    service all with serviceImpl
+service all with serviceImpl

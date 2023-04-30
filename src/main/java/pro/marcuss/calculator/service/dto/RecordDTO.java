@@ -20,14 +20,13 @@ public class RecordDTO implements Serializable {
     private Operator operationId;
 
     @NotNull
-    @DecimalMin(value = "0")
     private Double amount;
 
     @NotNull
     private Double userBalance;
 
     @NotNull
-    private String operationRespose;
+    private String operationResponse;
 
     private Instant date;
 
@@ -73,12 +72,12 @@ public class RecordDTO implements Serializable {
         this.userBalance = userBalance;
     }
 
-    public String getOperationRespose() {
-        return operationRespose;
+    public String getOperationResponse() {
+        return operationResponse;
     }
 
-    public void setOperationRespose(String operationRespose) {
-        this.operationRespose = operationRespose;
+    public void setOperationResponse(String operationResponse) {
+        this.operationResponse = operationResponse;
     }
 
     public Instant getDate() {
@@ -127,7 +126,7 @@ public class RecordDTO implements Serializable {
             ", operationId='" + getOperationId() + "'" +
             ", amount=" + getAmount() +
             ", userBalance=" + getUserBalance() +
-            ", operationRespose='" + getOperationRespose() + "'" +
+            ", operationResponse='" + getOperationResponse() + "'" +
             ", date='" + getDate() + "'" +
             ", user=" + getUser() +
             "}";

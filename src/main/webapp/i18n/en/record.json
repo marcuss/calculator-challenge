@@ -22,7 +22,7 @@
       "operationId": "Operation Id",
       "amount": "Amount",
       "userBalance": "User Balance",
-      "operationRespose": "Operation Respose",
+      "operationResponse": "Operation Response",
       "date": "Date",
       "user": "User"
     }

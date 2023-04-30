@@ -37,14 +37,14 @@ class RecordResourceIT {
     private static final Operator DEFAULT_OPERATION_ID = Operator.ADD;
     private static final Operator UPDATED_OPERATION_ID = Operator.SUBSTRACT;
 
-    private static final Double DEFAULT_AMOUNT = 0D;
-    private static final Double UPDATED_AMOUNT = 1D;
+    private static final Double DEFAULT_AMOUNT = 1D;
+    private static final Double UPDATED_AMOUNT = 2D;
 
     private static final Double DEFAULT_USER_BALANCE = 1D;
     private static final Double UPDATED_USER_BALANCE = 2D;
 
-    private static final String DEFAULT_OPERATION_RESPOSE = "AAAAAAAAAA";
-    private static final String UPDATED_OPERATION_RESPOSE = "BBBBBBBBBB";
+    private static final String DEFAULT_OPERATION_RESPONSE = "AAAAAAAAAA";
+    private static final String UPDATED_OPERATION_RESPONSE = "BBBBBBBBBB";
 
     private static final Instant DEFAULT_DATE = Instant.ofEpochMilli(0L);
     private static final Instant UPDATED_DATE = Instant.now().truncatedTo(ChronoUnit.MILLIS);
@@ -75,7 +75,7 @@ class RecordResourceIT {
             .operationId(DEFAULT_OPERATION_ID)
             .amount(DEFAULT_AMOUNT)
             .userBalance(DEFAULT_USER_BALANCE)
-            .operationRespose(DEFAULT_OPERATION_RESPOSE)
+            .operationResponse(DEFAULT_OPERATION_RESPONSE)
             .date(DEFAULT_DATE);
         return record;
     }
@@ -92,7 +92,7 @@ class RecordResourceIT {
             .operationId(UPDATED_OPERATION_ID)
             .amount(UPDATED_AMOUNT)
             .userBalance(UPDATED_USER_BALANCE)
-            .operationRespose(UPDATED_OPERATION_RESPOSE)
+            .operationResponse(UPDATED_OPERATION_RESPONSE)
             .date(UPDATED_DATE);
         return record;
     }
@@ -120,7 +120,7 @@ class RecordResourceIT {
         assertThat(testRecord.getOperationId()).isEqualTo(DEFAULT_OPERATION_ID);
         assertThat(testRecord.getAmount()).isEqualTo(DEFAULT_AMOUNT);
         assertThat(testRecord.getUserBalance()).isEqualTo(DEFAULT_USER_BALANCE);
-        assertThat(testRecord.getOperationRespose()).isEqualTo(DEFAULT_OPERATION_RESPOSE);
+        assertThat(testRecord.getOperationResponse()).isEqualTo(DEFAULT_OPERATION_RESPONSE);
         assertThat(testRecord.getDate()).isEqualTo(DEFAULT_DATE);
     }
 
@@ -194,10 +194,10 @@ class RecordResourceIT {
     }
 
     @Test
-    void checkOperationResposeIsRequired() throws Exception {
+    void checkOperationResponseIsRequired() throws Exception {
         int databaseSizeBeforeTest = recordRepository.findAll().size();
         // set the field null
-        record.setOperationRespose(null);
+        record.setOperationResponse(null);
 
         // Create the Record, which fails.
         RecordDTO recordDTO = recordMapper.toDto(record);
@@ -226,7 +226,7 @@ class RecordResourceIT {
             .andExpect(jsonPath("$.[*].operationId").value(hasItem(DEFAULT_OPERATION_ID.toString())))
             .andExpect(jsonPath("$.[*].amount").value(hasItem(DEFAULT_AMOUNT.doubleValue())))
             .andExpect(jsonPath("$.[*].userBalance").value(hasItem(DEFAULT_USER_BALANCE.doubleValue())))
-            .andExpect(jsonPath("$.[*].operationRespose").value(hasItem(DEFAULT_OPERATION_RESPOSE)))
+            .andExpect(jsonPath("$.[*].operationResponse").value(hasItem(DEFAULT_OPERATION_RESPONSE)))
             .andExpect(jsonPath("$.[*].date").value(hasItem(DEFAULT_DATE.toString())));
     }
 
@@ -246,7 +246,7 @@ class RecordResourceIT {
             .andExpect(jsonPath("$.operationId").value(DEFAULT_OPERATION_ID.toString()))
             .andExpect(jsonPath("$.amount").value(DEFAULT_AMOUNT.doubleValue()))
             .andExpect(jsonPath("$.userBalance").value(DEFAULT_USER_BALANCE.doubleValue()))
-            .andExpect(jsonPath("$.operationRespose").value(DEFAULT_OPERATION_RESPOSE))
+            .andExpect(jsonPath("$.operationResponse").value(DEFAULT_OPERATION_RESPONSE))
             .andExpect(jsonPath("$.date").value(DEFAULT_DATE.toString()));
     }
 
@@ -271,7 +271,7 @@ class RecordResourceIT {
             .operationId(UPDATED_OPERATION_ID)
             .amount(UPDATED_AMOUNT)
             .userBalance(UPDATED_USER_BALANCE)
-            .operationRespose(UPDATED_OPERATION_RESPOSE)
+            .operationResponse(UPDATED_OPERATION_RESPONSE)
             .date(UPDATED_DATE);
         RecordDTO recordDTO = recordMapper.toDto(updatedRecord);
 
@@ -291,7 +291,7 @@ class RecordResourceIT {
         assertThat(testRecord.getOperationId()).isEqualTo(UPDATED_OPERATION_ID);
         assertThat(testRecord.getAmount()).isEqualTo(UPDATED_AMOUNT);
         assertThat(testRecord.getUserBalance()).isEqualTo(UPDATED_USER_BALANCE);
-        assertThat(testRecord.getOperationRespose()).isEqualTo(UPDATED_OPERATION_RESPOSE);
+        assertThat(testRecord.getOperationResponse()).isEqualTo(UPDATED_OPERATION_RESPONSE);
         assertThat(testRecord.getDate()).isEqualTo(UPDATED_DATE);
     }
 
@@ -387,7 +387,7 @@ class RecordResourceIT {
         assertThat(testRecord.getOperationId()).isEqualTo(DEFAULT_OPERATION_ID);
         assertThat(testRecord.getAmount()).isEqualTo(DEFAULT_AMOUNT);
         assertThat(testRecord.getUserBalance()).isEqualTo(UPDATED_USER_BALANCE);
-        assertThat(testRecord.getOperationRespose()).isEqualTo(DEFAULT_OPERATION_RESPOSE);
+        assertThat(testRecord.getOperationResponse()).isEqualTo(DEFAULT_OPERATION_RESPONSE);
         assertThat(testRecord.getDate()).isEqualTo(DEFAULT_DATE);
     }
 
@@ -408,7 +408,7 @@ class RecordResourceIT {
             .operationId(UPDATED_OPERATION_ID)
             .amount(UPDATED_AMOUNT)
             .userBalance(UPDATED_USER_BALANCE)
-            .operationRespose(UPDATED_OPERATION_RESPOSE)
+            .operationResponse(UPDATED_OPERATION_RESPONSE)
             .date(UPDATED_DATE);
 
         restRecordMockMvc
@@ -427,7 +427,7 @@ class RecordResourceIT {
         assertThat(testRecord.getOperationId()).isEqualTo(UPDATED_OPERATION_ID);
         assertThat(testRecord.getAmount()).isEqualTo(UPDATED_AMOUNT);
         assertThat(testRecord.getUserBalance()).isEqualTo(UPDATED_USER_BALANCE);
-        assertThat(testRecord.getOperationRespose()).isEqualTo(UPDATED_OPERATION_RESPOSE);
+        assertThat(testRecord.getOperationResponse()).isEqualTo(UPDATED_OPERATION_RESPONSE);
         assertThat(testRecord.getDate()).isEqualTo(UPDATED_DATE);
     }
 

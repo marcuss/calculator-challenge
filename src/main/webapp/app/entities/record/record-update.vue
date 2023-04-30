@@ -68,9 +68,6 @@
               <small class="form-text text-danger" v-if="!$v.record.amount.required" v-text="$t('entity.validation.required')">
                 This field is required.
               </small>
-              <small class="form-text text-danger" v-if="!$v.record.amount.min" v-text="$t('entity.validation.min', { min: 0 })">
-                This field should be at least 0.
-              </small>
               <small class="form-text text-danger" v-if="!$v.record.amount.numeric" v-text="$t('entity.validation.number')">
                 This field should be a number.
               </small>
@@ -98,21 +95,21 @@
             </div>
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="$t('calculatorApp.record.operationRespose')" for="record-operationRespose"
-              >Operation Respose</label
+            <label class="form-control-label" v-text="$t('calculatorApp.record.operationResponse')" for="record-operationResponse"
+              >Operation Response</label
             >
             <input
               type="text"
               class="form-control"
-              name="operationRespose"
-              id="record-operationRespose"
-              data-cy="operationRespose"
-              :class="{ valid: !$v.record.operationRespose.$invalid, invalid: $v.record.operationRespose.$invalid }"
-              v-model="$v.record.operationRespose.$model"
+              name="operationResponse"
+              id="record-operationResponse"
+              data-cy="operationResponse"
+              :class="{ valid: !$v.record.operationResponse.$invalid, invalid: $v.record.operationResponse.$invalid }"
+              v-model="$v.record.operationResponse.$model"
               required
             />
-            <div v-if="$v.record.operationRespose.$anyDirty && $v.record.operationRespose.$invalid">
-              <small class="form-text text-danger" v-if="!$v.record.operationRespose.required" v-text="$t('entity.validation.required')">
+            <div v-if="$v.record.operationResponse.$anyDirty && $v.record.operationResponse.$invalid">
+              <small class="form-text text-danger" v-if="!$v.record.operationResponse.required" v-text="$t('entity.validation.required')">
                 This field is required.
               </small>
             </div>

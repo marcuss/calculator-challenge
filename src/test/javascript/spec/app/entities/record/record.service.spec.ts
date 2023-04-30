@@ -101,7 +101,7 @@ describe('Service Tests', () => {
             operationId: 'BBBBBB',
             amount: 1,
             userBalance: 1,
-            operationRespose: 'BBBBBB',
+            operationResponse: 'BBBBBB',
             date: dayjs(currentDate).format(DATE_TIME_FORMAT),
           },
           elemDefault
@@ -174,7 +174,7 @@ describe('Service Tests', () => {
             operationId: 'BBBBBB',
             amount: 1,
             userBalance: 1,
-            operationRespose: 'BBBBBB',
+            operationResponse: 'BBBBBB',
             date: dayjs(currentDate).format(DATE_TIME_FORMAT),
           },
           elemDefault

@@ -7,7 +7,7 @@ export interface IRecord {
   operationId?: Operator | null;
   amount?: number;
   userBalance?: number;
-  operationRespose?: string;
+  operationResponse?: string;
   date?: Date | null;
   user?: IUser | null;
 }
@@ -19,7 +19,7 @@ export class Record implements IRecord {
     public operationId?: Operator | null,
     public amount?: number,
     public userBalance?: number,
-    public operationRespose?: string,
+    public operationResponse?: string,
     public date?: Date | null,
     public user?: IUser | null
   ) {
