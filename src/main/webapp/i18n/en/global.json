@@ -7,9 +7,8 @@
       "jhipster-needle-menu-add-element": "JHipster will add additional menu entries here (do not translate!)",
       "entities": {
         "main": "Entities",
-        "operation": "Operation",
-        "record": "Record",
-        "userBalance": "User",
+        "operation": "Operation Costs",
+        "record": "Operations",
         "userBalance": "User Balance",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },

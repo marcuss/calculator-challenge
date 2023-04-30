@@ -2,29 +2,29 @@
   "calculatorApp": {
     "record": {
       "home": {
-        "title": "Records",
+        "title": "Operations",
         "refreshListLabel": "Refrescar lista",
-        "createLabel": "Crear nuevo Record",
-        "createOrEditLabel": "Crear o editar Record",
-        "notFound": "Ningún Records encontrado"
+        "createLabel": "Executar nueva operación",
+        "createOrEditLabel": "Executar nueva operación",
+        "notFound": "Ningúna operación encontrado"
       },
-      "created": "Un nuevo Record ha sido creado con el identificador {{ param }}",
-      "updated": "Un Record ha sido actualizado con el identificador {{ param }}",
-      "deleted": "Un Record ha sido eliminado con el identificador {{ param }}",
+      "created": "Una nueva operación ha sido registrada con el identificador {{ param }}",
+      "updated": "Una nueva operación ha sido actualizada con el identificador {{ param }}",
+      "deleted": "Una nueva operación ha sido eliminada con el identificador {{ param }}",
       "delete": {
-        "question": "¿Seguro que quiere eliminar Record {{ id }}?"
+        "question": "¿Seguro que quiere eliminar el registro de la operación {{ id }}?"
       },
       "detail": {
-        "title": "Record"
+        "title": "Registro de Operaciones"
       },
       "id": "Id",
       "active": "Active",
-      "operationId": "Operation Id",
-      "amount": "Amount",
-      "userBalance": "User Balance",
-      "operationRespose": "Operation Respose",
-      "date": "Date",
-      "user": "User"
+      "operationId": "Id de Operation",
+      "amount": "Cantidad",
+      "userBalance": "Balance",
+      "operationRespose": "Respuesta",
+      "date": "Fecha/Hora",
+      "user": "Usuario"
     }
   }
 }

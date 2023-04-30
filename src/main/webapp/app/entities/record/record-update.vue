@@ -24,7 +24,13 @@
               data-cy="active"
               :class="{ valid: !$v.record.active.$invalid, invalid: $v.record.active.$invalid }"
               v-model="$v.record.active.$model"
+              required
             />
+            <div v-if="$v.record.active.$anyDirty && $v.record.active.$invalid">
+              <small class="form-text text-danger" v-if="!$v.record.active.required" v-text="$t('entity.validation.required')">
+                This field is required.
+              </small>
+            </div>
           </div>
           <div class="form-group">
             <label class="form-control-label" v-text="$t('calculatorApp.record.operationId')" for="record-operationId">Operation Id</label>

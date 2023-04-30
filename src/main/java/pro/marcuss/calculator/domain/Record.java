@@ -21,8 +21,9 @@ public class Record implements Serializable {
     @Id
     private String id;
 
+    @NotNull
     @Field("active")
-    private Boolean active = true;
+    private Boolean active;
 
     @Field("operation_id")
     private Operator operationId;

@@ -11,7 +11,8 @@
     },
     {
       "fieldName": "active",
-      "fieldType": "Boolean"
+      "fieldType": "Boolean",
+      "fieldValidateRules": ["required"]
     },
     {
       "fieldName": "operationId",

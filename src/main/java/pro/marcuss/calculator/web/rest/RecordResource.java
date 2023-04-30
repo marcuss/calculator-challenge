@@ -63,7 +63,7 @@ public class RecordResource {
         }
         RecordDTO result = recordService.save(recordDTO);
         return ResponseEntity
-            .created(new URI("/api/v1/records/" + result.getId()))
+            .created(new URI("/api/records/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId()))
             .body(result);
     }

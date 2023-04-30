@@ -143,6 +143,23 @@ class RecordResourceIT {
     }
 
     @Test
+    void checkActiveIsRequired() throws Exception {
+        int databaseSizeBeforeTest = recordRepository.findAll().size();
+        // set the field null
+        record.setActive(null);
+
+        // Create the Record, which fails.
+        RecordDTO recordDTO = recordMapper.toDto(record);
+
+        restRecordMockMvc
+            .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(recordDTO)))
+            .andExpect(status().isBadRequest());
+
+        List<Record> recordList = recordRepository.findAll();
+        assertThat(recordList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
     void checkAmountIsRequired() throws Exception {
         int databaseSizeBeforeTest = recordRepository.findAll().size();
         // set the field null

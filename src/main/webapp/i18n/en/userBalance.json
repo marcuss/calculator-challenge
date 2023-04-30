@@ -4,18 +4,18 @@
       "home": {
         "title": "Users",
         "refreshListLabel": "Refresh list",
-        "createLabel": "Create a new User Balance",
-        "createOrEditLabel": "Create or edit a User Balance",
-        "notFound": "No User Balances found"
+        "createLabel": "Set the User Balance",
+        "createOrEditLabel": "Create or edit a User balance",
+        "notFound": "No User balances records found"
       },
-      "created": "A new User Balance is created with identifier {{ param }}",
-      "updated": "A User Balance is updated with identifier {{ param }}",
-      "deleted": "A User Balance is deleted with identifier {{ param }}",
+      "created": "A new User balance record is created with identifier {{ param }}",
+      "updated": "A User balance record is updated with identifier {{ param }}",
+      "deleted": "A User balance record is deleted with identifier {{ param }}",
       "delete": {
-        "question": "Are you sure you want to delete User Balance {{ id }}?"
+        "question": "Are you sure you want to delete User balance record {{ id }}?"
       },
       "detail": {
-        "title": "User Balance"
+        "title": "User balances"
       },
       "id": "ID",
       "balance": "Balance",

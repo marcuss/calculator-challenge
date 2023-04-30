@@ -4,8 +4,8 @@
       "home": {
         "title": "Records",
         "refreshListLabel": "Refresh list",
-        "createLabel": "Create a new Record",
-        "createOrEditLabel": "Create or edit a Record",
+        "createLabel": "Execute new Operation",
+        "createOrEditLabel": "Execute new Operation",
         "notFound": "No Records found"
       },
       "created": "A new Record is created with identifier {{ param }}",

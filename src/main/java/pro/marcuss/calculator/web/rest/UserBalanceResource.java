@@ -57,7 +57,7 @@ public class UserBalanceResource {
         }
         UserBalanceDTO result = userBalanceService.save(userBalanceDTO);
         return ResponseEntity
-            .created(new URI("/api/v1/user-balances/" + result.getId()))
+            .created(new URI("/api/user-balances/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId()))
             .body(result);
     }

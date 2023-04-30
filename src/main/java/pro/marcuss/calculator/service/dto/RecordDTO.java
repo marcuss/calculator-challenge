@@ -14,6 +14,7 @@ public class RecordDTO implements Serializable {
 
     private String id;
 
+    @NotNull
     private Boolean active;
 
     private Operator operationId;

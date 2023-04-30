@@ -2,20 +2,20 @@
   "calculatorApp": {
     "operation": {
       "home": {
-        "title": "Operations",
+        "title": "Costo de Operaciones",
         "refreshListLabel": "Refrescar lista",
-        "createLabel": "Crear nuevo Operation",
-        "createOrEditLabel": "Crear o editar Operation",
-        "notFound": "Ningún Operations encontrado"
+        "createLabel": "Crear nuevo costo de operación",
+        "createOrEditLabel": "Crear o editar costo de operación",
+        "notFound": "Ningúna operación encontrada"
       },
-      "created": "Un nuevo Operation ha sido creado con el identificador {{ param }}",
-      "updated": "Un Operation ha sido actualizado con el identificador {{ param }}",
-      "deleted": "Un Operation ha sido eliminado con el identificador {{ param }}",
+      "created": "Un nuevo costo de operación ha sido registrada con el identificador {{ param }}",
+      "updated": "Una nueva operación ha sido actualizada con el identificador {{ param }}",
+      "deleted": "Una nueva operación ha sido eliminada con el identificador {{ param }}",
       "delete": {
-        "question": "¿Seguro que quiere eliminar Operation {{ id }}?"
+        "question": "¿Seguro que quiere eliminar el registro de la operación {{ id }}?"
       },
       "detail": {
-        "title": "Operation"
+        "title": "Registro de Operaciones"
       },
       "id": "Id",
       "operator": "Operator",

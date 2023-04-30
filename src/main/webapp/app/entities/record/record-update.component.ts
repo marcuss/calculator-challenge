@@ -1,6 +1,6 @@
 import { Component, Vue, Inject } from 'vue-property-decorator';
 
-import { decimal, required, minValue } from 'vuelidate/lib/validators';
+import { required, decimal, minValue } from 'vuelidate/lib/validators';
 import dayjs from 'dayjs';
 import { DATE_TIME_LONG_FORMAT } from '@/shared/date/filters';
 
@@ -14,7 +14,8 @@ import { Operator } from '@/shared/model/enumerations/operator.model';
 
 const validations: any = {
   record: {
-    active: {},
+    active: {
+    },
     operationId: {},
     amount: {
       required,
@@ -22,7 +23,6 @@ const validations: any = {
       min: minValue(0),
     },
     userBalance: {
-      required,
       decimal,
     },
     operationRespose: {

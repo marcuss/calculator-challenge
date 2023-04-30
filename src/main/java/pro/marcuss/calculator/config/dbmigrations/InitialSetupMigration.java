@@ -3,6 +3,8 @@ package pro.marcuss.calculator.config.dbmigrations;
 import io.mongock.api.annotations.ChangeUnit;
 import io.mongock.api.annotations.Execution;
 import io.mongock.api.annotations.RollbackExecution;
+
+import java.math.BigDecimal;
 import java.time.Instant;
 import java.util.Arrays;
 import java.util.List;
@@ -107,7 +109,12 @@ public class InitialSetupMigration {
         return Arrays.stream(Operator.values()).map(
             operator -> new Operation()
                 .operator(operator)
-                .cost(0.9 + 9 * new Random().nextDouble())
+                .cost(createRandomDouble(3))
         ).collect(Collectors.toList());
+    }
+
+    private double createRandomDouble(int decimalPlaces) {
+        double scale = Math.pow(10, decimalPlaces);
+        return Math.round((0.9 + 9 * new Random().nextDouble()) * scale) / scale;
     }
 }
