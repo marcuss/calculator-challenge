@@ -15,25 +15,7 @@
             <input type="text" class="form-control" id="id" name="id" v-model="record.id" readonly />
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="$t('calculatorApp.record.active')" for="record-active">Active</label>
-            <input
-              type="checkbox"
-              class="form-check"
-              name="active"
-              id="record-active"
-              data-cy="active"
-              :class="{ valid: !$v.record.active.$invalid, invalid: $v.record.active.$invalid }"
-              v-model="$v.record.active.$model"
-              required
-            />
-            <div v-if="$v.record.active.$anyDirty && $v.record.active.$invalid">
-              <small class="form-text text-danger" v-if="!$v.record.active.required" v-text="$t('entity.validation.required')">
-                This field is required.
-              </small>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-control-label" v-text="$t('calculatorApp.record.operationId')" for="record-operationId">Operation Id</label>
+            <label class="form-control-label" v-text="$t('calculatorApp.record.operationId')" for="record-operationId">Operation</label>
             <select
               class="form-control"
               name="operationId"
@@ -73,64 +55,8 @@
               </small>
             </div>
           </div>
-          <div class="form-group">
-            <label class="form-control-label" v-text="$t('calculatorApp.record.userBalance')" for="record-userBalance">User Balance</label>
-            <input
-              type="number"
-              class="form-control"
-              name="userBalance"
-              id="record-userBalance"
-              data-cy="userBalance"
-              :class="{ valid: !$v.record.userBalance.$invalid, invalid: $v.record.userBalance.$invalid }"
-              v-model.number="$v.record.userBalance.$model"
-              required
-            />
-            <div v-if="$v.record.userBalance.$anyDirty && $v.record.userBalance.$invalid">
-              <small class="form-text text-danger" v-if="!$v.record.userBalance.required" v-text="$t('entity.validation.required')">
-                This field is required.
-              </small>
-              <small class="form-text text-danger" v-if="!$v.record.userBalance.numeric" v-text="$t('entity.validation.number')">
-                This field should be a number.
-              </small>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-control-label" v-text="$t('calculatorApp.record.operationResponse')" for="record-operationResponse"
-              >Operation Response</label
-            >
-            <input
-              type="text"
-              class="form-control"
-              name="operationResponse"
-              id="record-operationResponse"
-              data-cy="operationResponse"
-              :class="{ valid: !$v.record.operationResponse.$invalid, invalid: $v.record.operationResponse.$invalid }"
-              v-model="$v.record.operationResponse.$model"
-              required
-            />
-            <div v-if="$v.record.operationResponse.$anyDirty && $v.record.operationResponse.$invalid">
-              <small class="form-text text-danger" v-if="!$v.record.operationResponse.required" v-text="$t('entity.validation.required')">
-                This field is required.
-              </small>
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-control-label" v-text="$t('calculatorApp.record.date')" for="record-date">Date</label>
-            <div class="d-flex">
-              <input
-                id="record-date"
-                data-cy="date"
-                type="datetime-local"
-                class="form-control"
-                name="date"
-                :class="{ valid: !$v.record.date.$invalid, invalid: $v.record.date.$invalid }"
-                :value="convertDateTimeFromServer($v.record.date.$model)"
-                @change="updateInstantField('date', $event)"
-              />
-            </div>
-          </div>
-          <div class="form-group">
-            <label class="form-control-label" v-text="$t('calculatorApp.record.user')" for="record-user">User</label>
+          <div class="form-group"  v-if="hasAnyAuthority('ROLE_ADMIN')" >
+            <label class="form-control-label" v-text="$t('calculatorApp.record.user')" for="record-user">User </label>
             <select class="form-control" id="record-user" data-cy="user" name="user" v-model="record.user">
               <option v-bind:value="null"></option>
               <option
@@ -138,7 +64,7 @@
                 v-for="userOption in users"
                 :key="userOption.id"
               >
-                {{ userOption.id }}
+                {{ userOption.login }}
               </option>
             </select>
           </div>

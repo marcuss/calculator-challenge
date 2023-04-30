@@ -71,7 +71,7 @@ describe('Formatter i18n', () => {
 
   it('should parse links', () => {
     const result = dataUtilsService.parseLinks(
-      '<http://localhost/api/entities?' +
+      '<http://localhost/api/v1/entities?' +
         'sort=date%2Cdesc&sort=id&page=1&size=12>; rel="next",<http://localhost/api' +
         '/entities?sort=date%2Cdesc&sort=id&page=2&size=12>; rel="last",<http://localhost' +
         '/api/v1/entities?sort=date%2Cdesc&sort=id&page=0&size=12>; rel="first"'

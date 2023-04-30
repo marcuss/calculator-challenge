@@ -10,8 +10,6 @@
         "operation": "Operation Costs",
         "record": "Operations",
         "userBalance": "User Balance",
-        "record": "Record",
-        "operation": "Operation",
         "jhipster-needle-menu-add-entry": "JHipster will add additional entities here (do not translate!)"
       },
       "account": {

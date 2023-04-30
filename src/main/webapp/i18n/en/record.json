@@ -19,7 +19,7 @@
       },
       "id": "Id",
       "active": "Active",
-      "operationId": "Operation Id",
+      "operationId": "Operation",
       "amount": "Amount",
       "userBalance": "User Balance",
       "operationResponse": "Operation Response",

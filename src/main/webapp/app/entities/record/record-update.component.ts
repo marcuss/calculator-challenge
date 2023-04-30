@@ -5,7 +5,7 @@ import dayjs from 'dayjs';
 import { DATE_TIME_LONG_FORMAT } from '@/shared/date/filters';
 
 import AlertService from '@/shared/alert/alert.service';
-
+import AccountService from "@/account/account.service";
 import UserService from '@/entities/user/user.service';
 
 import { IRecord, Record } from '@/shared/model/record.model';
@@ -25,7 +25,6 @@ const validations: any = {
       decimal,
     },
     operationResponse: {
-      required,
     },
     date: {},
   },
@@ -37,10 +36,11 @@ const validations: any = {
 export default class RecordUpdate extends Vue {
   @Inject('recordService') private recordService: () => RecordService;
   @Inject('alertService') private alertService: () => AlertService;
+  @Inject('userService') private userService: () => UserService;
+  @Inject('accountService') private accountService: () => AccountService;
 
   public record: IRecord = new Record();
-
-  @Inject('userService') private userService: () => UserService;
+  private hasAnyAuthorityValues = {};
 
   public users: Array<any> = [];
   public operatorValues: string[] = Object.keys(Operator);
@@ -154,5 +154,16 @@ export default class RecordUpdate extends Vue {
       .then(res => {
         this.users = res.data;
       });
+  }
+
+  public hasAnyAuthority(authorities: any): boolean {
+    this.accountService()
+      .hasAnyAuthorityAndCheckAuth(authorities)
+      .then(value => {
+        if (this.hasAnyAuthorityValues[authorities] !== value) {
+          this.hasAnyAuthorityValues = { ...this.hasAnyAuthorityValues, [authorities]: value };
+        }
+      });
+    return this.hasAnyAuthorityValues[authorities] ?? false;
   }
 }

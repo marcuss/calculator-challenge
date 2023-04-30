@@ -3,6 +3,7 @@ package pro.marcuss.calculator.domain;
 import java.io.Serializable;
 import javax.validation.constraints.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import pro.marcuss.calculator.domain.enumeration.Operator;
@@ -21,6 +22,7 @@ public class Operation implements Serializable {
 
     @NotNull
     @Field("operator")
+    @Indexed(unique = true)
     private Operator operator;
 
     @NotNull

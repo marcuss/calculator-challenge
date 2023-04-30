@@ -35,7 +35,7 @@ class OperationResourceIT {
     private static final Double DEFAULT_COST = 0D;
     private static final Double UPDATED_COST = 1D;
 
-    private static final String ENTITY_API_URL = "/api/operations";
+    private static final String ENTITY_API_URL = "/api/v1/operations";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
 
     @Autowired
