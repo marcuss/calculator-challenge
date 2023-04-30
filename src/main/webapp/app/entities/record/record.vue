@@ -28,13 +28,13 @@
       <table class="table table-striped" aria-describedby="records">
         <thead>
           <tr>
-            <th scope="row" v-on:click="changeOrder('id')">
-              <span v-text="$t('global.field.id')">ID</span>
-              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator>
-            </th>
-            <th scope="row" v-on:click="changeOrder('active')">
+            <th scope="row" v-if="hasAnyAuthority('ROLE_ADMIN')" v-on:click="changeOrder('active')">
               <span v-text="$t('calculatorApp.record.active')">Active</span>
               <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'active'"></jhi-sort-indicator>
+            </th>
+            <th scope="row" v-if="hasAnyAuthority('ROLE_ADMIN')" v-on:click="changeOrder('user.id')">
+              <span v-text="$t('calculatorApp.record.user')">User</span>
+              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'user.id'"></jhi-sort-indicator>
             </th>
             <th scope="row" v-on:click="changeOrder('operationId')">
               <span v-text="$t('calculatorApp.record.operationId')">Operation Id</span>
@@ -44,39 +44,34 @@
               <span v-text="$t('calculatorApp.record.amount')">Amount</span>
               <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'amount'"></jhi-sort-indicator>
             </th>
-            <th scope="row" v-on:click="changeOrder('userBalance')">
-              <span v-text="$t('calculatorApp.record.userBalance')">User Balance</span>
-              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'userBalance'"></jhi-sort-indicator>
-            </th>
             <th scope="row" v-on:click="changeOrder('operationResponse')">
               <span v-text="$t('calculatorApp.record.operationResponse')">Operation Response</span>
               <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'operationResponse'"></jhi-sort-indicator>
+            </th>
+            <th scope="row" v-on:click="changeOrder('userBalance')">
+              <span v-text="$t('calculatorApp.record.userBalance')">User Balance</span>
+              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'userBalance'"></jhi-sort-indicator>
             </th>
             <th scope="row" v-on:click="changeOrder('date')">
               <span v-text="$t('calculatorApp.record.date')">Date</span>
               <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'date'"></jhi-sort-indicator>
             </th>
-            <th scope="row" v-on:click="changeOrder('user.id')">
-              <span v-text="$t('calculatorApp.record.user')">User</span>
-              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'user.id'"></jhi-sort-indicator>
-            </th>
+
             <th scope="row"></th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="record in records" :key="record.id" data-cy="entityTable">
-            <td>
-              <router-link :to="{ name: 'RecordView', params: { recordId: record.id } }">{{ record.id }}</router-link>
+            <td v-if="hasAnyAuthority('ROLE_ADMIN')">{{ record.active }}</td>
+            <td v-if="hasAnyAuthority('ROLE_ADMIN')">
+              {{ record.user ? record.user.login : '' }}
             </td>
-            <td>{{ record.active }}</td>
             <td v-text="$t('calculatorApp.Operator.' + record.operationId)">{{ record.operationId }}</td>
             <td>{{ record.amount }}</td>
-            <td>{{ record.userBalance }}</td>
-            <td>{{ record.operationResponse }}</td>
-            <td>{{ record.date ? $d(Date.parse(record.date), 'short') : '' }}</td>
-            <td>
-              {{ record.user ? record.user.id : '' }}
-            </td>
+            <td> = {{ roundTo(record.operationResponse,2) }}</td>
+            <td> ${{ roundTo(record.userBalance,2) }}</td>
+            <td>{{ record.date ? $d(Date.parse(record.date),  'short') : '' }} </td>
+
             <td class="text-right">
               <div class="btn-group">
                 <router-link :to="{ name: 'RecordView', params: { recordId: record.id } }" custom v-slot="{ navigate }">

@@ -11,11 +11,11 @@ entity Operation {
 entity Record {
 	id String,
     active Boolean required,
-    operationId Operator,
+    operationId Operator required,
     amount Double required,
     userBalance Double required,
     operationResponse String required,
-    date Instant
+    date Instant required
 }
 
 entity UserBalance {

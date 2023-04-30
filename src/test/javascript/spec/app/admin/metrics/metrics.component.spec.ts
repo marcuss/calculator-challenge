@@ -143,6 +143,20 @@ describe('Metrics Component', () => {
         'cache.removals': 0.0,
         'cache.evictions': 0.0,
       },
+      balanceByUserLogin: {
+        'cache.gets.miss': 1.0,
+        'cache.puts': 1.0,
+        'cache.gets.hit': 1.0,
+        'cache.removals': 0.0,
+        'cache.evictions': 0.0,
+      },
+      costByOperator: {
+        'cache.gets.miss': 1.0,
+        'cache.puts': 1.0,
+        'cache.gets.hit': 1.0,
+        'cache.removals': 0.0,
+        'cache.evictions': 0.0,
+      },
       'tech.jhipster.domain.Authority': {
         'cache.gets.miss': 0.0,
         'cache.puts': 2.0,

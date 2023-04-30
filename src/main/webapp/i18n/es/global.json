@@ -140,6 +140,7 @@
     "idnull": "ID inválido",
     "idinvalid": "ID inválido",
     "idnotfound": "ID no encontrado",
+    "invalidconfig": "Error cirtico de configuración para : {{param}}",
     "operation-cost-already-defined": "El costo de la operación ya esta definido, intenta editar el actual o eliminarlo.",
     "file": {
       "could.not.extract": "No se pudo extraer el fichero",

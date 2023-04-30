@@ -4,6 +4,7 @@ import { IRecord } from '@/shared/model/record.model';
 
 import RecordService from './record.service';
 import AlertService from '@/shared/alert/alert.service';
+import AccountService from "@/account/account.service";
 
 @Component({
   mixins: [Vue2Filters.mixin],
@@ -11,8 +12,11 @@ import AlertService from '@/shared/alert/alert.service';
 export default class Record extends Vue {
   @Inject('recordService') private recordService: () => RecordService;
   @Inject('alertService') private alertService: () => AlertService;
+  @Inject('accountService') private accountService: () => AccountService;
 
   private removeId: string = null;
+  private hasAnyAuthorityValues = {};
+
   public itemsPerPage = 20;
   public queryCount: number = null;
   public page = 1;
@@ -117,4 +121,20 @@ export default class Record extends Vue {
   public closeDialog(): void {
     (<any>this.$refs.removeEntity).hide();
   }
+
+  public hasAnyAuthority(authorities: any): boolean {
+    this.accountService()
+      .hasAnyAuthorityAndCheckAuth(authorities)
+      .then(value => {
+        if (this.hasAnyAuthorityValues[authorities] !== value) {
+          this.hasAnyAuthorityValues = { ...this.hasAnyAuthorityValues, [authorities]: value };
+        }
+      });
+    return this.hasAnyAuthorityValues[authorities] ?? false;
+  }
+
+  public roundTo(value: string, places: number){
+    return parseFloat(value).toFixed(places).padEnd(10);
+  }
+
 }

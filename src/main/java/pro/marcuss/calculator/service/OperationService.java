@@ -3,6 +3,7 @@ package pro.marcuss.calculator.service;
 import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import pro.marcuss.calculator.domain.enumeration.Operator;
 import pro.marcuss.calculator.service.dto.OperationDTO;
 
 /**
@@ -48,6 +49,8 @@ public interface OperationService {
      * @return the entity.
      */
     Optional<OperationDTO> findOne(String id);
+
+    Optional<OperationDTO> findOneByOperator(Operator operator);
 
     /**
      * Delete the "id" operation.

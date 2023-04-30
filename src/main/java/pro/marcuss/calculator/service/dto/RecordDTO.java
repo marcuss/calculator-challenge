@@ -14,18 +14,16 @@ public class RecordDTO implements Serializable {
 
     private String id;
 
-    @NotNull
     private Boolean active;
 
+    @NotNull
     private Operator operationId;
 
     @NotNull
     private Double amount;
 
-    @NotNull
     private Double userBalance;
 
-    @NotNull
     private String operationResponse;
 
     private Instant date;

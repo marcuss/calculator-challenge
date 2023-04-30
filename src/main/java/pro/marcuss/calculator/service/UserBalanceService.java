@@ -47,6 +47,8 @@ public interface UserBalanceService {
      */
     Optional<UserBalanceDTO> findOne(String id);
 
+    Optional<UserBalanceDTO> findUserBalanceByUserId(String login);
+
     /**
      * Delete the "id" userBalance.
      *

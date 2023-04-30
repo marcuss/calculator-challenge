@@ -15,11 +15,14 @@ import org.springframework.stereotype.Service;
 import pro.marcuss.calculator.config.Constants;
 import pro.marcuss.calculator.domain.Authority;
 import pro.marcuss.calculator.domain.User;
+import pro.marcuss.calculator.domain.UserBalance;
 import pro.marcuss.calculator.repository.AuthorityRepository;
+import pro.marcuss.calculator.repository.UserBalanceRepository;
 import pro.marcuss.calculator.repository.UserRepository;
 import pro.marcuss.calculator.security.AuthoritiesConstants;
 import pro.marcuss.calculator.security.SecurityUtils;
 import pro.marcuss.calculator.service.dto.AdminUserDTO;
+import pro.marcuss.calculator.service.dto.UserBalanceDTO;
 import pro.marcuss.calculator.service.dto.UserDTO;
 import tech.jhipster.security.RandomUtil;
 
@@ -39,16 +42,19 @@ public class UserService {
 
     private final CacheManager cacheManager;
 
+    private final UserBalanceRepository userBalanceRepository;
+
     public UserService(
         UserRepository userRepository,
         PasswordEncoder passwordEncoder,
         AuthorityRepository authorityRepository,
-        CacheManager cacheManager
-    ) {
+        CacheManager cacheManager,
+        UserBalanceRepository userBalanceRepository) {
         this.userRepository = userRepository;
         this.passwordEncoder = passwordEncoder;
         this.authorityRepository = authorityRepository;
         this.cacheManager = cacheManager;
+        this.userBalanceRepository = userBalanceRepository;
     }
 
     public Optional<User> activateRegistration(String key) {
@@ -130,10 +136,18 @@ public class UserService {
         Set<Authority> authorities = new HashSet<>();
         authorityRepository.findById(AuthoritiesConstants.USER).ifPresent(authorities::add);
         newUser.setAuthorities(authorities);
-        userRepository.save(newUser);
+        User persistedUser = userRepository.save(newUser);
         this.clearUserCaches(newUser);
+        createInitialBalanceRecord(persistedUser);
         log.debug("Created Information for User: {}", newUser);
         return newUser;
+    }
+
+    private void createInitialBalanceRecord(User persistedUser) {
+        UserBalance initialBalance = new UserBalance();
+        initialBalance.setBalance(Constants.DEFAULT_INITIAL_BALANCE);
+        initialBalance.setUser(persistedUser);
+        userBalanceRepository.save(initialBalance);
     }
 
     private boolean removeNonActivatedUser(User existingUser) {
@@ -174,8 +188,9 @@ public class UserService {
                 .collect(Collectors.toSet());
             user.setAuthorities(authorities);
         }
-        userRepository.save(user);
+        User persistedUser = userRepository.save(user);
         this.clearUserCaches(user);
+        createInitialBalanceRecord(persistedUser);
         log.debug("Created Information for User: {}", user);
         return user;
     }

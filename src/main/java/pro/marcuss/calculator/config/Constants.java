@@ -11,5 +11,7 @@ public final class Constants {
     public static final String SYSTEM = "system";
     public static final String DEFAULT_LANGUAGE = "en";
 
+    public static final double DEFAULT_INITIAL_BALANCE = 100;
+
     private Constants() {}
 }

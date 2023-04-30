@@ -25,6 +25,7 @@ public class Record implements Serializable {
     @Field("active")
     private Boolean active;
 
+    @NotNull
     @Field("operation_id")
     private Operator operationId;
 
@@ -40,6 +41,7 @@ public class Record implements Serializable {
     @Field("operation_response")
     private String operationResponse;
 
+    @NotNull
     @Field("date")
     private Instant date;
 

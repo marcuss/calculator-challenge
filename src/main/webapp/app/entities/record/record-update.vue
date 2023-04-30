@@ -23,6 +23,7 @@
               v-model="$v.record.operationId.$model"
               id="record-operationId"
               data-cy="operationId"
+              required
             >
               <option
                 v-for="operator in operatorValues"
@@ -33,6 +34,11 @@
                 {{ operator }}
               </option>
             </select>
+            <div v-if="$v.record.operationId.$anyDirty && $v.record.operationId.$invalid">
+              <small class="form-text text-danger" v-if="!$v.record.operationId.required" v-text="$t('entity.validation.required')">
+                This field is required.
+              </small>
+            </div>
           </div>
           <div class="form-group">
             <label class="form-control-label" v-text="$t('calculatorApp.record.amount')" for="record-amount">Amount</label>

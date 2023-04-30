@@ -139,6 +139,30 @@
               <option v-for="(language, key) in languages" :value="key" :key="key">{{ language.name }}</option>
             </select>
           </div>
+
+
+<!--          <div class="form-group">
+            <label class="form-control-label" v-text="$t('calculatorApp.record.amount')" for="record-amount">Amount</label>
+            <input>
+              type="number"
+              class="form-control"
+              name="amount"
+              id="record-amount"
+              data-cy="amount"
+              :class="{ valid: !$v.record.amount.$invalid, invalid: $v.record.amount.$invalid }"
+              v-model.number="$v.record.amount.$model"
+              requiredC
+            />
+            <div v-if="$v.record.amount.$anyDirty && $v.record.amount.$invalid">
+              <small class="form-text text-danger" v-if="!$v.record.amount.required" v-text="$t('entity.validation.required')">
+
+              </small>
+              <small class="form-text text-danger" v-if="!$v.record.amount.numeric" v-text="$t('entity.validation.number')">
+
+              </small>
+            </div>
+          </div>-->
+
           <div class="form-group">
             <label v-text="$t('userManagement.profiles')">Profiles</label>
             <select class="form-control" multiple name="authority" v-model="userAccount.authorities">

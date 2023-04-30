@@ -17,6 +17,7 @@
     {
       "fieldName": "operationId",
       "fieldType": "Operator",
+      "fieldValidateRules": ["required"],
       "fieldValues": "ADD,SUBSTRACT,MULTIPLY,DIVIDE,SQROOT,RANDOM_STRING"
     },
     {
@@ -36,7 +37,8 @@
     },
     {
       "fieldName": "date",
-      "fieldType": "Instant"
+      "fieldType": "Instant",
+      "fieldValidateRules": ["required"]
     }
   ],
   "fluentMethods": true,

@@ -1,13 +1,18 @@
 package pro.marcuss.calculator.service.impl;
 
+import java.util.Objects;
 import java.util.Optional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pro.marcuss.calculator.domain.Operation;
+import pro.marcuss.calculator.domain.User;
+import pro.marcuss.calculator.domain.enumeration.Operator;
 import pro.marcuss.calculator.repository.OperationRepository;
+import pro.marcuss.calculator.repository.UserRepository;
 import pro.marcuss.calculator.service.OperationService;
 import pro.marcuss.calculator.service.dto.OperationDTO;
 import pro.marcuss.calculator.service.mapper.OperationMapper;
@@ -24,9 +29,14 @@ public class OperationServiceImpl implements OperationService {
 
     private final OperationMapper operationMapper;
 
-    public OperationServiceImpl(OperationRepository operationRepository, OperationMapper operationMapper) {
+    private final CacheManager cacheManager;
+
+    public OperationServiceImpl(OperationRepository operationRepository,
+                                OperationMapper operationMapper,
+                                CacheManager cacheManager) {
         this.operationRepository = operationRepository;
         this.operationMapper = operationMapper;
+        this.cacheManager = cacheManager;
     }
 
     @Override
@@ -34,6 +44,7 @@ public class OperationServiceImpl implements OperationService {
         log.debug("Request to save Operation : {}", operationDTO);
         Operation operation = operationMapper.toEntity(operationDTO);
         operation = operationRepository.save(operation);
+        clearUserCaches(operation.getOperator());
         return operationMapper.toDto(operation);
     }
 
@@ -42,6 +53,7 @@ public class OperationServiceImpl implements OperationService {
         log.debug("Request to update Operation : {}", operationDTO);
         Operation operation = operationMapper.toEntity(operationDTO);
         operation = operationRepository.save(operation);
+        clearUserCaches(operation.getOperator());
         return operationMapper.toDto(operation);
     }
 
@@ -49,7 +61,7 @@ public class OperationServiceImpl implements OperationService {
     public Optional<OperationDTO> partialUpdate(OperationDTO operationDTO) {
         log.debug("Request to partially update Operation : {}", operationDTO);
 
-        return operationRepository
+        Optional<OperationDTO> updated = operationRepository
             .findById(operationDTO.getId())
             .map(existingOperation -> {
                 operationMapper.partialUpdate(existingOperation, operationDTO);
@@ -58,6 +70,8 @@ public class OperationServiceImpl implements OperationService {
             })
             .map(operationRepository::save)
             .map(operationMapper::toDto);
+        clearUserCaches(updated.get().getOperator());
+        return updated;
     }
 
     @Override
@@ -73,8 +87,20 @@ public class OperationServiceImpl implements OperationService {
     }
 
     @Override
+    public Optional<OperationDTO> findOneByOperator(Operator operator){
+        log.debug("Request to get Operation by operator: {}", operator);
+        return operationRepository.findOneByOperator(operator).map(operationMapper::toDto);
+    }
+
+    @Override
     public void delete(String id) {
         log.debug("Request to delete Operation : {}", id);
+        Operator toDelete = operationRepository.findById(id).get().getOperator();
         operationRepository.deleteById(id);
+        clearUserCaches(toDelete);
+    }
+
+    private void clearUserCaches(Operator operator) {
+        Objects.requireNonNull(cacheManager.getCache(OperationRepository.COST_BY_OPERATOR_CACHE)).evict(operator);
     }
 }

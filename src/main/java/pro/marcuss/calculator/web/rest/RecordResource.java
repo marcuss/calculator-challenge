@@ -2,6 +2,7 @@ package pro.marcuss.calculator.web.rest;
 
 import java.net.URI;
 import java.net.URISyntaxException;
+import java.time.Instant;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -15,9 +16,12 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pro.marcuss.calculator.repository.RecordRepository;
+import pro.marcuss.calculator.security.AuthoritiesConstants;
+import pro.marcuss.calculator.security.SecurityUtils;
 import pro.marcuss.calculator.service.RecordService;
 import pro.marcuss.calculator.service.dto.RecordDTO;
 import pro.marcuss.calculator.web.rest.errors.BadRequestAlertException;
@@ -61,9 +65,12 @@ public class RecordResource {
         if (recordDTO.getId() != null) {
             throw new BadRequestAlertException("A new record cannot already have an ID", ENTITY_NAME, "idexists");
         }
+        if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN) && recordDTO.getUser() != null){
+            throw new AccessDeniedException("Only users with admin roles can specify the owner of an operation");
+        }
         RecordDTO result = recordService.save(recordDTO);
         return ResponseEntity
-            .created(new URI("/api/records/" + result.getId()))
+            .created(new URI("/api/v1/records/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId()))
             .body(result);
     }

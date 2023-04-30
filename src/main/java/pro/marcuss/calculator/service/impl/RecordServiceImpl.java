@@ -1,16 +1,30 @@
 package pro.marcuss.calculator.service.impl;
 
-import java.util.Optional;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import org.springframework.cache.CacheManager;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import pro.marcuss.calculator.domain.Record;
 import pro.marcuss.calculator.repository.RecordRepository;
+import pro.marcuss.calculator.security.SecurityUtils;
+import pro.marcuss.calculator.service.OperationService;
 import pro.marcuss.calculator.service.RecordService;
+import pro.marcuss.calculator.service.UserBalanceService;
+import pro.marcuss.calculator.service.UserService;
+import pro.marcuss.calculator.service.dto.OperationDTO;
 import pro.marcuss.calculator.service.dto.RecordDTO;
+import pro.marcuss.calculator.service.dto.UserBalanceDTO;
+import pro.marcuss.calculator.service.dto.UserDTO;
 import pro.marcuss.calculator.service.mapper.RecordMapper;
+import pro.marcuss.calculator.web.rest.errors.InvalidConfigurationException;
+
+import java.time.Instant;
+import java.util.Optional;
 
 /**
  * Service Implementation for managing {@link Record}.
@@ -24,17 +38,111 @@ public class RecordServiceImpl implements RecordService {
 
     private final RecordMapper recordMapper;
 
-    public RecordServiceImpl(RecordRepository recordRepository, RecordMapper recordMapper) {
+    private final UserService userService;
+
+    private final OperationService operationService;
+
+    private final UserBalanceService userBalanceService;
+
+    private final CacheManager cacheManager;
+
+    public RecordServiceImpl(RecordRepository recordRepository,
+                             RecordMapper recordMapper,
+                             UserService userService,
+                             OperationService operationService,
+                             UserBalanceService userBalanceService,
+                             CacheManager cacheManager) {
         this.recordRepository = recordRepository;
         this.recordMapper = recordMapper;
+        this.userService = userService;
+        this.operationService = operationService;
+        this.userBalanceService = userBalanceService;
+        this.cacheManager = cacheManager;
     }
 
     @Override
     public RecordDTO save(RecordDTO recordDTO) {
         log.debug("Request to save Record : {}", recordDTO);
-        Record record = recordMapper.toEntity(recordDTO);
-        record = recordRepository.save(record);
-        return recordMapper.toDto(record);
+        final String userLogin = SecurityUtils.getCurrentUserLogin().get(); //only logged-in users get this far
+        recordDTO.setActive(true);
+        recordDTO.setDate(Instant.now());
+        if (recordDTO.getUser() == null) {
+            recordDTO.setUser(
+                userService.getUserWithAuthoritiesByLogin(userLogin).map(UserDTO::new).get()
+            );
+        }
+        Optional<OperationDTO> operationDTO = operationService.findOneByOperator(recordDTO.getOperationId());
+        if (operationDTO.isEmpty()) {
+            throw new InvalidConfigurationException("Operation cost not found", "operation", "invalidconfig");
+        }
+
+        Optional<UserBalanceDTO> balanceDTO = Optional.empty();
+
+        if (recordDTO.getUser() != null) {
+            //get balance from a cacheable method
+            balanceDTO = userBalanceService.findUserBalanceByUserId(recordDTO.getUser().getId());
+        } else {
+            recordDTO.setUser(userService.getUserWithAuthoritiesByLogin(userLogin).map(UserDTO::new).get());
+            //get balance from a cacheable method
+            balanceDTO = userBalanceService.findUserBalanceByUserId(recordDTO.getUser().getId());
+        }
+
+        if (balanceDTO.isEmpty()) {
+            throw new InvalidConfigurationException("Missing balance registry for User: " + userLogin, "userBalance", "invalidconfig");
+        }
+        recordDTO.setUserBalance(balanceDTO.get().getBalance() - operationDTO.get().getCost());
+
+        String lastOperationResponse = null;
+        try {
+            lastOperationResponse = (String) cacheManager.getCache(
+                RecordRepository.LAST_OPERATION_RESPONSE_BY_USER).get(recordDTO.getUser().getLogin()
+            ).get();
+        } catch (NullPointerException e) {
+        }
+        recordDTO.setOperationResponse(applyOperation(lastOperationResponse, recordDTO));
+        postSaveRecordWork(recordDTO, balanceDTO);
+        return recordMapper.toDto(
+            recordRepository.save(recordMapper.toEntity(recordDTO))
+        );
+    }
+
+    private String applyOperation(String lastOperationResponse, RecordDTO recordDTO) {
+        double lastResponseNumeric = 0;
+        if (NumberUtils.isCreatable(lastOperationResponse)) {
+            lastResponseNumeric = Double.parseDouble(lastOperationResponse);
+        }
+        switch (recordDTO.getOperationId()) {
+            case ADD:
+                return String.valueOf(lastResponseNumeric + recordDTO.getAmount());
+            case SUBSTRACT:
+                return String.valueOf(lastResponseNumeric - recordDTO.getAmount());
+            case MULTIPLY:
+                return String.valueOf(lastResponseNumeric * recordDTO.getAmount());
+            case DIVIDE:
+                return String.valueOf(lastResponseNumeric / recordDTO.getAmount());
+            case SQROOT:
+                return String.valueOf(Math.sqrt(lastResponseNumeric));
+            case RANDOM_STRING:
+                return "some random string";
+            default:
+                return lastOperationResponse;
+        }
+    }
+
+    @Async
+    public void postSaveRecordWork(RecordDTO recordDTO, Optional<UserBalanceDTO> balanceDTO) {
+        try {
+            log.debug("Request to update Record caches for: {}", recordDTO);
+            cacheManager.getCache(
+                RecordRepository.LAST_OPERATION_RESPONSE_BY_USER
+            ).put(recordDTO.getUser().getLogin(), recordDTO.getOperationResponse());
+            if (balanceDTO.isPresent()) {
+                balanceDTO.get().setBalance(recordDTO.getUserBalance());
+                userBalanceService.save(balanceDTO.get());
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
     @Override
@@ -63,7 +171,7 @@ public class RecordServiceImpl implements RecordService {
     @Override
     public Page<RecordDTO> findAll(Pageable pageable) {
         log.debug("Request to get all Records");
-        return recordRepository.findAll(pageable).map(recordMapper::toDto);
+        return recordRepository.findAllByActiveIsTrueOrderByDateDesc(pageable).map(recordMapper::toDto);
     }
 
     @Override
@@ -75,6 +183,11 @@ public class RecordServiceImpl implements RecordService {
     @Override
     public void delete(String id) {
         log.debug("Request to delete Record : {}", id);
-        recordRepository.deleteById(id);
+        Optional<RecordDTO> toDelete = findOne(id);
+        if (toDelete.isPresent()) {
+            RecordDTO toDeleteDTO = toDelete.get();
+            toDeleteDTO.setActive(false);
+            update(toDeleteDTO);
+        }
     }
 }
