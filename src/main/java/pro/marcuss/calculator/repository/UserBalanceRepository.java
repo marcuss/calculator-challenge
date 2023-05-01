@@ -16,5 +16,5 @@ public interface UserBalanceRepository extends MongoRepository<UserBalance, Stri
     String BALANCE_BY_USER_ID_LOGIN = "balanceByUserLogin";
 
     @Cacheable(cacheNames = BALANCE_BY_USER_ID_LOGIN)
-    Optional<UserBalance> findUserBalanceByUserLogin(String id);
+    Optional<UserBalance> findUserBalanceByUserLogin(String login);
 }

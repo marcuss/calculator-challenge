@@ -28,28 +28,21 @@
       <table class="table table-striped" aria-describedby="userBalances">
         <thead>
           <tr>
-            <th scope="row" v-on:click="changeOrder('id')">
-              <span v-text="$t('global.field.id')">ID</span>
-              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator>
+            <th scope="row" v-on:click="changeOrder('userLogin')">
+              <span v-text="$t('calculatorApp.userBalance.userLogin')">User Login</span>
+              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'userLogin'"></jhi-sort-indicator>
             </th>
             <th scope="row" v-on:click="changeOrder('balance')">
               <span v-text="$t('calculatorApp.userBalance.balance')">Balance</span>
               <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'balance'"></jhi-sort-indicator>
-            </th>
-            <th scope="row" v-on:click="changeOrder('userLogin')">
-              <span v-text="$t('calculatorApp.userBalance.userLogin')">User Login</span>
-              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'userLogin'"></jhi-sort-indicator>
             </th>
             <th scope="row"></th>
           </tr>
         </thead>
         <tbody>
           <tr v-for="userBalance in userBalances" :key="userBalance.id" data-cy="entityTable">
-            <td>
-              <router-link :to="{ name: 'UserBalanceView', params: { userBalanceId: userBalance.id } }">{{ userBalance.id }}</router-link>
-            </td>
-            <td>{{ userBalance.balance }}</td>
             <td>{{ userBalance.userLogin }}</td>
+            <td>${{ userBalance.balance }}</td>
             <td class="text-right">
               <div class="btn-group">
                 <router-link :to="{ name: 'UserBalanceView', params: { userBalanceId: userBalance.id } }" custom v-slot="{ navigate }">

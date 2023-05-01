@@ -40,10 +40,21 @@ public class UserBalanceServiceImpl implements UserBalanceService {
     @Override
     public UserBalanceDTO save(UserBalanceDTO userBalanceDTO) {
         log.debug("Request to save UserBalance : {}", userBalanceDTO);
-        UserBalance userBalance = userBalanceMapper.toEntity(userBalanceDTO);
-        userBalance = userBalanceRepository.save(userBalance);
-        updateUserCache(userBalance.getUserLogin(), userBalance);
-        return userBalanceMapper.toDto(userBalance);
+        if (userBalanceDTO.getUserLogin() == null) {
+            userBalanceDTO.setUserLogin(userBalanceDTO.getUser().getLogin());
+        }
+
+        Optional<UserBalance> existingBalance = userBalanceRepository.findUserBalanceByUserLogin(userBalanceDTO.getUserLogin());
+        if (existingBalance.isPresent()) {
+            existingBalance.get().setBalance(userBalanceDTO.getBalance());
+            UserBalance existingBalanceSaved = userBalanceRepository.save(existingBalance.get());
+            updateUserCache(existingBalanceSaved.getUserLogin(), existingBalanceSaved);
+            return userBalanceMapper.toDto(existingBalanceSaved);
+        } else {
+            UserBalance userBalance = userBalanceRepository.save(userBalanceMapper.toEntity(userBalanceDTO));
+            updateUserCache(userBalance.getUserLogin(), userBalance);
+            return userBalanceMapper.toDto(userBalance);
+        }
     }
 
     @Override

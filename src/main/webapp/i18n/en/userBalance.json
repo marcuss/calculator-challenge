@@ -2,10 +2,10 @@
   "calculatorApp": {
     "userBalance": {
       "home": {
-        "title": "Users",
+        "title": "Users Balances",
         "refreshListLabel": "Refresh list",
         "createLabel": "Set the User Balance",
-        "createOrEditLabel": "Create or edit a User balance",
+        "createOrEditLabel": "Edit a User balance",
         "notFound": "No User balances records found"
       },
       "created": "A new User balance record is created with identifier {{ param }}",

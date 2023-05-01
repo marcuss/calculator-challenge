@@ -77,10 +77,10 @@ public class InitialSetupMigration {
         User admin = createAdmin(adminAuthority, userAuthority);
         admin = template.save(admin);
         UserBalance userBalanceAdmin = new UserBalance();
-        userBalance.setUserLogin(admin.getLogin());
-        userBalance.setUser(admin);
-        userBalance.setBalance(1_000_000d);
-        template.save(userBalance);
+        userBalanceAdmin.setUserLogin(admin.getLogin());
+        userBalanceAdmin.setUser(admin);
+        userBalanceAdmin.setBalance(1_000_000d);
+        template.save(userBalanceAdmin);
     }
 
     private User createUser(Authority userAuthority) {

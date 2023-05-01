@@ -1,8 +1,8 @@
 package pro.marcuss.calculator.service.dto;
 
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.util.Objects;
-import javax.validation.constraints.*;
 
 /**
  * A DTO for the {@link pro.marcuss.calculator.domain.UserBalance} entity.
@@ -15,7 +15,6 @@ public class UserBalanceDTO implements Serializable {
     @NotNull
     private Double balance;
 
-    @NotNull
     private String userLogin;
 
     private UserDTO user;

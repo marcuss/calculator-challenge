@@ -34,7 +34,6 @@ spring:
     mongodb:
       uri: mongodb://localhost:27017
       database: calculator
-      auto-index-creation: true
   mail:
     host: localhost
     port: 25

@@ -2,10 +2,10 @@
   "calculatorApp": {
     "userBalance": {
       "home": {
-        "title": "User Balances",
+        "title": "Balances de Usuario",
         "refreshListLabel": "Refrescar lista",
-        "createLabel": "Crear nuevo Balance",
-        "createOrEditLabel": "Crear o editar balance de Usuario",
+        "createLabel": "Editar  Balance",
+        "createOrEditLabel": "Editar balance de Usuario",
         "notFound": "Ningún balance de Usuario encontrado"
       },
       "created": "Un nuevo balance ha sido creado con el identificador {{ param }}",
