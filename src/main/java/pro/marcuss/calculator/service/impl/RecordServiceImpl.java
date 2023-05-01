@@ -9,10 +9,7 @@ import org.springframework.scheduling.annotation.Async;
 import org.springframework.stereotype.Service;
 import pro.marcuss.calculator.domain.Record;
 import pro.marcuss.calculator.repository.RecordRepository;
-import pro.marcuss.calculator.service.OperationService;
-import pro.marcuss.calculator.service.RecordService;
-import pro.marcuss.calculator.service.UserBalanceService;
-import pro.marcuss.calculator.service.UserService;
+import pro.marcuss.calculator.service.*;
 import pro.marcuss.calculator.service.dto.OperationDTO;
 import pro.marcuss.calculator.service.dto.RecordDTO;
 import pro.marcuss.calculator.service.dto.UserBalanceDTO;
@@ -41,18 +38,22 @@ public class RecordServiceImpl implements RecordService {
 
     private final CacheHelperService cacheHelperService;
 
+    private final RandomStringService randomStringService;
+
     public RecordServiceImpl(RecordRepository recordRepository,
                              RecordMapper recordMapper,
                              UserService userService,
                              OperationService operationService,
                              UserBalanceService userBalanceService,
-                             CacheHelperService cacheHelperService) {
+                             CacheHelperService cacheHelperService,
+                             RandomStringService randomStringService) {
         this.recordRepository = recordRepository;
         this.recordMapper = recordMapper;
         this.userService = userService;
         this.operationCosts = operationService;
         this.userBalanceService = userBalanceService;
         this.cacheHelperService = cacheHelperService;
+        this.randomStringService = randomStringService;
     }
 
     @Override
@@ -111,7 +112,7 @@ public class RecordServiceImpl implements RecordService {
             case SQROOT:
                 return String.valueOf(Math.sqrt(lastResponseNumeric));
             case RANDOM_STRING:
-                return "some random string";
+                return randomStringService.getRandomDouble();
             default:
                 return lastOperationResponse;
         }
