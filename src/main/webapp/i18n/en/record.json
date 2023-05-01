@@ -18,6 +18,7 @@
         "title": "Record"
       },
       "id": "Id",
+      "userLogin": "User Login",
       "active": "Active",
       "operation": "Operation",
       "amount": "Amount",

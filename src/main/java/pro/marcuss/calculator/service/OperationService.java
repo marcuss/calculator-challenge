@@ -1,10 +1,11 @@
 package pro.marcuss.calculator.service;
 
-import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import pro.marcuss.calculator.domain.enumeration.Operator;
 import pro.marcuss.calculator.service.dto.OperationDTO;
+
+import java.util.Optional;
 
 /**
  * Service Interface for managing {@link pro.marcuss.calculator.domain.Operation}.
@@ -50,6 +51,12 @@ public interface OperationService {
      */
     Optional<OperationDTO> findOne(String id);
 
+    /**
+     * Get the operation cost by operator.
+     *
+     * @param operator the operator of the entity.
+     * @return the entity.
+     */
     Optional<OperationDTO> findOneByOperator(Operator operator);
 
     /**

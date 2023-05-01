@@ -18,6 +18,7 @@
         "title": "Registro de Operaciones"
       },
       "id": "Id",
+      "userLogin": "Login de Usuario",
       "active": "Active",
       "operation": "Operación",
       "amount": "Cantidad",

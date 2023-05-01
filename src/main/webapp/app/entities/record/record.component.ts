@@ -1,9 +1,9 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
-import Vue2Filters from 'vue2-filters';
-import { IRecord } from '@/shared/model/record.model';
+import { Component, Inject, Vue } from "vue-property-decorator";
+import Vue2Filters from "vue2-filters";
+import { IRecord } from "@/shared/model/record.model";
 
-import RecordService from './record.service';
-import AlertService from '@/shared/alert/alert.service';
+import RecordService from "./record.service";
+import AlertService from "@/shared/alert/alert.service";
 import AccountService from "@/account/account.service";
 
 @Component({
@@ -135,6 +135,10 @@ export default class Record extends Vue {
 
   public roundTo(value: string, places: number){
     return parseFloat(value).toFixed(places).padEnd(10);
+  }
+
+  public isSQRoot() {
+    return
   }
 
 }

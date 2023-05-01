@@ -40,7 +40,7 @@
               </small>
             </div>
           </div>
-          <div class="form-group">
+          <div class="form-group" v-if="!(record.operation === 'SQROOT' || record.operation === 'RANDOM_STRING')">
             <label class="form-control-label" v-text="$t('calculatorApp.record.amount')" for="record-amount">Amount</label>
             <input
               type="number"
@@ -75,6 +75,7 @@
             </select>
           </div>
         </div>
+        {{ shouldDisableSaveButton($v.record.$invalid) }}
         <div>
           <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" v-on:click="previousState()">
             <font-awesome-icon icon="ban"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.cancel')">Cancel</span>
@@ -83,7 +84,7 @@
             type="submit"
             id="save-entity"
             data-cy="entityCreateSaveButton"
-            :disabled="$v.record.$invalid || isSaving"
+            :disabled="shouldDisableSaveButton($v.record.$invalid) || isSaving"
             class="btn btn-primary"
           >
             <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.save')">Save</span>

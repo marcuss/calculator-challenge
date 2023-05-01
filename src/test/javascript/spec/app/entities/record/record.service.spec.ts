@@ -1,12 +1,12 @@
 /* tslint:disable max-line-length */
-import axios from 'axios';
-import sinon from 'sinon';
-import dayjs from 'dayjs';
+import axios from "axios";
+import sinon from "sinon";
+import dayjs from "dayjs";
 
-import { DATE_TIME_FORMAT } from '@/shared/date/filters';
-import RecordService from '@/entities/record/record.service';
-import { Record } from '@/shared/model/record.model';
-import { Operator } from '@/shared/model/enumerations/operator.model';
+import { DATE_TIME_FORMAT } from "@/shared/date/filters";
+import RecordService from "@/entities/record/record.service";
+import { Record } from "@/shared/model/record.model";
+import { Operator } from "@/shared/model/enumerations/operator.model";
 
 const error = {
   response: {
@@ -34,7 +34,7 @@ describe('Service Tests', () => {
     beforeEach(() => {
       service = new RecordService();
       currentDate = new Date();
-      elemDefault = new Record('ABC', false, Operator.ADD, 0, 0, 'AAAAAAA', currentDate);
+      elemDefault = new Record('ABC', 'AAAAAAA', false, Operator.ADD, 0, 0, 'AAAAAAA', currentDate);
     });
 
     describe('Service methods', () => {
@@ -97,6 +97,7 @@ describe('Service Tests', () => {
       it('should update a Record', async () => {
         const returnedFromService = Object.assign(
           {
+            userLogin: 'BBBBBB',
             active: true,
             operation: 'BBBBBB',
             amount: 1,
@@ -134,9 +135,10 @@ describe('Service Tests', () => {
       it('should partial update a Record', async () => {
         const patchObject = Object.assign(
           {
+            userLogin: 'BBBBBB',
             active: true,
             operation: 'BBBBBB',
-            amount: 1,
+            operationResponse: 'BBBBBB',
             date: dayjs(currentDate).format(DATE_TIME_FORMAT),
           },
           new Record()
@@ -170,6 +172,7 @@ describe('Service Tests', () => {
       it('should return a list of Record', async () => {
         const returnedFromService = Object.assign(
           {
+            userLogin: 'BBBBBB',
             active: true,
             operation: 'BBBBBB',
             amount: 1,

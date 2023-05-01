@@ -1,22 +1,27 @@
-import { Component, Vue, Inject } from 'vue-property-decorator';
+import { Component, Inject, Vue } from "vue-property-decorator";
 
-import { required, decimal } from 'vuelidate/lib/validators';
-import dayjs from 'dayjs';
-import { DATE_TIME_LONG_FORMAT } from '@/shared/date/filters';
+import { decimal, required } from "vuelidate/lib/validators";
+import dayjs from "dayjs";
+import { DATE_TIME_LONG_FORMAT } from "@/shared/date/filters";
 
-import AlertService from '@/shared/alert/alert.service';
+import AlertService from "@/shared/alert/alert.service";
 import AccountService from "@/account/account.service";
-import UserService from '@/entities/user/user.service';
+import UserService from "@/entities/user/user.service";
 
-import { IRecord, Record } from '@/shared/model/record.model';
-import RecordService from './record.service';
-import { Operator } from '@/shared/model/enumerations/operator.model';
+import { IRecord, Record } from "@/shared/model/record.model";
+import RecordService from "./record.service";
+import { Operator } from "@/shared/model/enumerations/operator.model";
 
 const validations: any = {
   record: {
+    userLogin: {
+    },
     active: {
     },
     operation: {
+      required,
+    },
+    user: {
       required,
     },
     amount: {
@@ -27,7 +32,8 @@ const validations: any = {
     },
     operationResponse: {
     },
-    date: {},
+    date: {
+    },
   },
 };
 
@@ -166,5 +172,14 @@ export default class RecordUpdate extends Vue {
         }
       });
     return this.hasAnyAuthorityValues[authorities] ?? false;
+  }
+
+  public shouldDisableSaveButton(validationResult: boolean): boolean {
+    if (validationResult === true)  {
+      return true;
+    }
+    else {
+      return this.record.operation == 'SQROOT' || this.record.operation == 'RANDOM_STRING';
+    }
   }
 }

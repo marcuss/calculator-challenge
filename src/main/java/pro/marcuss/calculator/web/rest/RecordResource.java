@@ -1,20 +1,11 @@
 package pro.marcuss.calculator.web.rest;
 
-import java.net.URI;
-import java.net.URISyntaxException;
-import java.time.Instant;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
-import javax.validation.Valid;
-import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.*;
@@ -29,6 +20,14 @@ import tech.jhipster.web.util.HeaderUtil;
 import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
+import javax.validation.Valid;
+import javax.validation.constraints.NotNull;
+import java.net.URI;
+import java.net.URISyntaxException;
+import java.util.List;
+import java.util.Objects;
+import java.util.Optional;
+
 /**
  * REST controller for managing {@link pro.marcuss.calculator.domain.Record}.
  */
@@ -36,16 +35,12 @@ import tech.jhipster.web.util.ResponseUtil;
 @RequestMapping("/api/v1")
 public class RecordResource {
 
-    private final Logger log = LoggerFactory.getLogger(RecordResource.class);
-
     private static final String ENTITY_NAME = "record";
-
+    private final Logger log = LoggerFactory.getLogger(RecordResource.class);
+    private final RecordService recordService;
+    private final RecordRepository recordRepository;
     @Value("${jhipster.clientApp.name}")
     private String applicationName;
-
-    private final RecordService recordService;
-
-    private final RecordRepository recordRepository;
 
     public RecordResource(RecordService recordService, RecordRepository recordRepository) {
         this.recordService = recordService;
@@ -65,9 +60,19 @@ public class RecordResource {
         if (recordDTO.getId() != null) {
             throw new BadRequestAlertException("A new record cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN) && recordDTO.getUser() != null){
-            throw new AccessDeniedException("Only users with admin roles can specify the owner of an operation");
+        if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
+            if (recordDTO.getUser() != null) {
+                throw new AccessDeniedException("Only users with admin roles can specify the owner of an operation");
+            } else {
+                //if not an admin set the login from context
+                recordDTO.setUserLogin(SecurityUtils.getCurrentUserLogin().get());
+            }
         }
+        if (SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
+            // if admin, set the login as set by admin in FE
+            recordDTO.setUserLogin(recordDTO.getUser().getLogin());
+        }
+
         RecordDTO result = recordService.save(recordDTO);
         return ResponseEntity
             .created(new URI("/api/v1/records/" + result.getId()))
@@ -78,7 +83,7 @@ public class RecordResource {
     /**
      * {@code PUT  /records/:id} : Updates an existing record.
      *
-     * @param id the id of the recordDTO to save.
+     * @param id        the id of the recordDTO to save.
      * @param recordDTO the recordDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated recordDTO,
      * or with status {@code 400 (Bad Request)} if the recordDTO is not valid,
@@ -112,7 +117,7 @@ public class RecordResource {
     /**
      * {@code PATCH  /records/:id} : Partial updates given fields of an existing record, field will ignore if it is null
      *
-     * @param id the id of the recordDTO to save.
+     * @param id        the id of the recordDTO to save.
      * @param recordDTO the recordDTO to update.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and with body the updated recordDTO,
      * or with status {@code 400 (Bad Request)} if the recordDTO is not valid,
@@ -120,7 +125,7 @@ public class RecordResource {
      * or with status {@code 500 (Internal Server Error)} if the recordDTO couldn't be updated.
      * @throws URISyntaxException if the Location URI syntax is incorrect.
      */
-    @PatchMapping(value = "/records/{id}", consumes = { "application/json", "application/merge-patch+json" })
+    @PatchMapping(value = "/records/{id}", consumes = {"application/json", "application/merge-patch+json"})
     public ResponseEntity<RecordDTO> partialUpdateRecord(
         @PathVariable(value = "id", required = false) final String id,
         @NotNull @RequestBody RecordDTO recordDTO

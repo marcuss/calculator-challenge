@@ -1,7 +1,8 @@
 package pro.marcuss.calculator.config;
 
-import java.time.Duration;
-import org.ehcache.config.builders.*;
+import org.ehcache.config.builders.CacheConfigurationBuilder;
+import org.ehcache.config.builders.ExpiryPolicyBuilder;
+import org.ehcache.config.builders.ResourcePoolsBuilder;
 import org.ehcache.jsr107.Eh107Configuration;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.autoconfigure.cache.JCacheManagerCustomizer;
@@ -9,9 +10,12 @@ import org.springframework.boot.info.BuildProperties;
 import org.springframework.boot.info.GitProperties;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
-import org.springframework.context.annotation.*;
+import org.springframework.context.annotation.Bean;
+import org.springframework.context.annotation.Configuration;
 import tech.jhipster.config.JHipsterProperties;
 import tech.jhipster.config.cache.PrefixedKeyGenerator;
+
+import java.time.Duration;
 
 @Configuration
 @EnableCaching
@@ -42,7 +46,7 @@ public class CacheConfiguration {
             createCache(cm, pro.marcuss.calculator.repository.UserBalanceRepository.BALANCE_BY_USER_ID_LOGIN);
             createCache(cm, pro.marcuss.calculator.repository.OperationRepository.COST_BY_OPERATOR_CACHE);
 
-            createCache(cm, pro.marcuss.calculator.repository.RecordRepository.LAST_OPERATION_RESPONSE_BY_USER);
+            createCache(cm, pro.marcuss.calculator.repository.RecordRepository.LAST_OPERATION_RESPONSE_BY_LOGIN);
             // jhipster-needle-ehcache-add-entry
         };
     }

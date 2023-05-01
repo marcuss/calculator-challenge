@@ -1,9 +1,10 @@
 package pro.marcuss.calculator.service;
 
-import java.util.Optional;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import pro.marcuss.calculator.service.dto.UserBalanceDTO;
+
+import java.util.Optional;
 
 /**
  * Service Interface for managing {@link pro.marcuss.calculator.domain.UserBalance}.
@@ -49,6 +50,12 @@ public interface UserBalanceService {
      */
     Optional<UserBalanceDTO> findOne(String id);
 
+    /**
+     * Get the userBalance by login.
+     *
+     * @param login the login of the user.
+     * @return the entity.
+     */
     Optional<UserBalanceDTO> findUserBalanceByUserLogin(String login);
 
     /**

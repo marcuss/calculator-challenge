@@ -1,10 +1,11 @@
 package pro.marcuss.calculator.service.dto;
 
+import pro.marcuss.calculator.domain.enumeration.Operator;
+
+import javax.validation.constraints.NotNull;
 import java.io.Serializable;
 import java.time.Instant;
 import java.util.Objects;
-import javax.validation.constraints.*;
-import pro.marcuss.calculator.domain.enumeration.Operator;
 
 /**
  * A DTO for the {@link pro.marcuss.calculator.domain.Record} entity.
@@ -13,6 +14,8 @@ import pro.marcuss.calculator.domain.enumeration.Operator;
 public class RecordDTO implements Serializable {
 
     private String id;
+
+    private String userLogin;
 
     private Boolean active;
 
@@ -36,6 +39,17 @@ public class RecordDTO implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getUserLogin() {
+        if (user != null) {
+            return user.getLogin();
+        }
+        return userLogin;
+    }
+
+    public void setUserLogin(String userLogin) {
+        this.userLogin = userLogin;
     }
 
     public Boolean getActive() {
@@ -120,13 +134,13 @@ public class RecordDTO implements Serializable {
     public String toString() {
         return "RecordDTO{" +
             "id='" + getId() + "'" +
+            ", userLogin='" + getUserLogin() + "'" +
             ", active='" + getActive() + "'" +
             ", operation='" + getOperation() + "'" +
             ", amount=" + getAmount() +
             ", userBalance=" + getUserBalance() +
             ", operationResponse='" + getOperationResponse() + "'" +
             ", date='" + getDate() + "'" +
-            ", user=" + getUser() +
             "}";
     }
 }

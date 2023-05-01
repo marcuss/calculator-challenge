@@ -1,14 +1,5 @@
 package pro.marcuss.calculator.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import java.time.Instant;
-import java.time.temporal.ChronoUnit;
-import java.util.List;
-import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -24,6 +15,16 @@ import pro.marcuss.calculator.repository.RecordRepository;
 import pro.marcuss.calculator.service.dto.RecordDTO;
 import pro.marcuss.calculator.service.mapper.RecordMapper;
 
+import java.time.Instant;
+import java.time.temporal.ChronoUnit;
+import java.util.List;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 /**
  * Integration tests for the {@link RecordResource} REST controller.
  */
@@ -31,6 +32,9 @@ import pro.marcuss.calculator.service.mapper.RecordMapper;
 @AutoConfigureMockMvc
 @WithMockUser
 class RecordResourceIT extends AbstractIntegrationTest {
+
+    private static final String DEFAULT_USER_LOGIN = "AAAAAAAAAA";
+    private static final String UPDATED_USER_LOGIN = "BBBBBBBBBB";
 
     private static final Boolean DEFAULT_ACTIVE = true;
     private static final Boolean UPDATED_ACTIVE = false;
@@ -72,6 +76,7 @@ class RecordResourceIT extends AbstractIntegrationTest {
      */
     public static Record createEntity() {
         Record record = new Record()
+            .userLogin(DEFAULT_USER_LOGIN)
             .active(DEFAULT_ACTIVE)
             .operation(DEFAULT_OPERATION)
             .amount(DEFAULT_AMOUNT)
@@ -89,6 +94,7 @@ class RecordResourceIT extends AbstractIntegrationTest {
      */
     public static Record createUpdatedEntity() {
         Record record = new Record()
+            .userLogin(UPDATED_USER_LOGIN)
             .active(UPDATED_ACTIVE)
             .operation(UPDATED_OPERATION)
             .amount(UPDATED_AMOUNT)
@@ -121,6 +127,7 @@ class RecordResourceIT extends AbstractIntegrationTest {
         List<Record> recordList = recordRepository.findAll();
         assertThat(recordList).hasSize(databaseSizeBeforeCreate + 1);
         Record testRecord = recordList.get(recordList.size() - 1);
+        assertThat(testRecord.getUserLogin()).isEqualTo(DEFAULT_USER_LOGIN);
         assertThat(testRecord.getActive()).isEqualTo(DEFAULT_ACTIVE);
         assertThat(testRecord.getOperation()).isEqualTo(DEFAULT_OPERATION);
         assertThat(testRecord.getAmount()).isEqualTo(DEFAULT_AMOUNT);
@@ -148,11 +155,11 @@ class RecordResourceIT extends AbstractIntegrationTest {
     }
 
     @Test
-    void checkActiveIsNotRequired() throws Exception { //the field is set to true in case is missing.
+    void checkUserLoginIsNotRequired() throws Exception {
         setUserBalanceForTests("user");
         int databaseSizeBeforeTest = recordRepository.findAll().size();
         // set the field null
-        record.setActive(null);
+        record.setUserLogin(null);
 
         // Create the Record, which fails.
         RecordDTO recordDTO = recordMapper.toDto(record);
@@ -162,8 +169,26 @@ class RecordResourceIT extends AbstractIntegrationTest {
             .andExpect(status().isCreated());
 
         List<Record> recordList = recordRepository.findAll();
-        assertThat(recordList).hasSize(databaseSizeBeforeTest + 1);
+        assertThat(recordList).hasSize(databaseSizeBeforeTest +1);
     }
+
+    @Test
+    void checkActiveIsNotRequired() throws Exception { //the field is set to true in case is missing.
+           setUserBalanceForTests("user");
+            int databaseSizeBeforeTest = recordRepository.findAll().size();
+            // set the field null
+            record.setActive(null);
+
+            // Create the Record, which fails.
+            RecordDTO recordDTO = recordMapper.toDto(record);
+
+            restRecordMockMvc
+                .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(recordDTO)))
+                .andExpect(status().isCreated());
+
+            List<Record> recordList = recordRepository.findAll();
+            assertThat(recordList).hasSize(databaseSizeBeforeTest + 1);
+        }
 
     @Test
     void checkOperationIsRequired() throws Exception {
@@ -262,6 +287,7 @@ class RecordResourceIT extends AbstractIntegrationTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(record.getId())))
+            .andExpect(jsonPath("$.[*].userLogin").value(hasItem(DEFAULT_USER_LOGIN)))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())))
             .andExpect(jsonPath("$.[*].operation").value(hasItem(DEFAULT_OPERATION.toString())))
             .andExpect(jsonPath("$.[*].amount").value(hasItem(DEFAULT_AMOUNT.doubleValue())))
@@ -282,6 +308,7 @@ class RecordResourceIT extends AbstractIntegrationTest {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(record.getId()))
+            .andExpect(jsonPath("$.userLogin").value(DEFAULT_USER_LOGIN))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()))
             .andExpect(jsonPath("$.operation").value(DEFAULT_OPERATION.toString()))
             .andExpect(jsonPath("$.amount").value(DEFAULT_AMOUNT.doubleValue()))
@@ -307,6 +334,7 @@ class RecordResourceIT extends AbstractIntegrationTest {
         // Update the record
         Record updatedRecord = recordRepository.findById(record.getId()).get();
         updatedRecord
+            .userLogin(UPDATED_USER_LOGIN)
             .active(UPDATED_ACTIVE)
             .operation(UPDATED_OPERATION)
             .amount(UPDATED_AMOUNT)
@@ -327,6 +355,7 @@ class RecordResourceIT extends AbstractIntegrationTest {
         List<Record> recordList = recordRepository.findAll();
         assertThat(recordList).hasSize(databaseSizeBeforeUpdate);
         Record testRecord = recordList.get(recordList.size() - 1);
+        assertThat(testRecord.getUserLogin()).isEqualTo(UPDATED_USER_LOGIN);
         assertThat(testRecord.getActive()).isEqualTo(UPDATED_ACTIVE);
         assertThat(testRecord.getOperation()).isEqualTo(UPDATED_OPERATION);
         assertThat(testRecord.getAmount()).isEqualTo(UPDATED_AMOUNT);
@@ -425,6 +454,7 @@ class RecordResourceIT extends AbstractIntegrationTest {
         List<Record> recordList = recordRepository.findAll();
         assertThat(recordList).hasSize(databaseSizeBeforeUpdate);
         Record testRecord = recordList.get(recordList.size() - 1);
+        assertThat(testRecord.getUserLogin()).isEqualTo(DEFAULT_USER_LOGIN);
         assertThat(testRecord.getActive()).isEqualTo(DEFAULT_ACTIVE);
         assertThat(testRecord.getOperation()).isEqualTo(DEFAULT_OPERATION);
         assertThat(testRecord.getAmount()).isEqualTo(DEFAULT_AMOUNT);
@@ -446,6 +476,7 @@ class RecordResourceIT extends AbstractIntegrationTest {
         partialUpdatedRecord.setId(record.getId());
 
         partialUpdatedRecord
+            .userLogin(UPDATED_USER_LOGIN)
             .active(UPDATED_ACTIVE)
             .operation(UPDATED_OPERATION)
             .amount(UPDATED_AMOUNT)
@@ -465,6 +496,7 @@ class RecordResourceIT extends AbstractIntegrationTest {
         List<Record> recordList = recordRepository.findAll();
         assertThat(recordList).hasSize(databaseSizeBeforeUpdate);
         Record testRecord = recordList.get(recordList.size() - 1);
+        assertThat(testRecord.getUserLogin()).isEqualTo(UPDATED_USER_LOGIN);
         assertThat(testRecord.getActive()).isEqualTo(UPDATED_ACTIVE);
         assertThat(testRecord.getOperation()).isEqualTo(UPDATED_OPERATION);
         assertThat(testRecord.getAmount()).isEqualTo(UPDATED_AMOUNT);

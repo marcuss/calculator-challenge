@@ -1,13 +1,14 @@
 package pro.marcuss.calculator.domain;
 
-import java.io.Serializable;
-import java.time.Instant;
-import javax.validation.constraints.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import pro.marcuss.calculator.domain.enumeration.Operator;
+
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
+import java.time.Instant;
 
 /**
  * A Record.
@@ -20,6 +21,10 @@ public class Record implements Serializable {
 
     @Id
     private String id;
+
+    @NotNull
+    @Field("user_login")
+    private String userLogin;
 
     @NotNull
     @Field("active")
@@ -62,6 +67,19 @@ public class Record implements Serializable {
 
     public void setId(String id) {
         this.id = id;
+    }
+
+    public String getUserLogin() {
+        return this.userLogin;
+    }
+
+    public Record userLogin(String userLogin) {
+        this.setUserLogin(userLogin);
+        return this;
+    }
+
+    public void setUserLogin(String userLogin) {
+        this.userLogin = userLogin;
     }
 
     public Boolean getActive() {
@@ -179,6 +197,7 @@ public class Record implements Serializable {
     public String toString() {
         return "Record{" +
             "id=" + getId() +
+            ", userLogin='" + getUserLogin() + "'" +
             ", active='" + getActive() + "'" +
             ", operation='" + getOperation() + "'" +
             ", amount=" + getAmount() +

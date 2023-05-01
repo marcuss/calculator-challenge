@@ -10,6 +10,7 @@ entity Operation {
 }
 entity Record {
 	id String,
+    userLogin String required,
     active Boolean required,
     operation Operator required,
     amount Double required,
