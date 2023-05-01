@@ -1,19 +1,21 @@
 /* tslint:disable max-line-length */
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
-import sinon, { SinonStubbedInstance } from 'sinon';
-import Router from 'vue-router';
-import { ToastPlugin } from 'bootstrap-vue';
+import { createLocalVue, shallowMount, Wrapper } from "@vue/test-utils";
+import sinon, { SinonStubbedInstance } from "sinon";
+import Router from "vue-router";
+import { ToastPlugin } from "bootstrap-vue";
 
-import dayjs from 'dayjs';
-import { DATE_TIME_LONG_FORMAT } from '@/shared/date/filters';
+import dayjs from "dayjs";
+import { DATE_TIME_LONG_FORMAT } from "@/shared/date/filters";
 
-import * as config from '@/shared/config/config';
-import RecordUpdateComponent from '@/entities/record/record-update.vue';
-import RecordClass from '@/entities/record/record-update.component';
-import RecordService from '@/entities/record/record.service';
+import * as config from "@/shared/config/config";
+import RecordUpdateComponent from "@/entities/record/record-update.vue";
+import RecordClass from "@/entities/record/record-update.component";
+import RecordService from "@/entities/record/record.service";
 
-import UserService from '@/entities/user/user.service';
-import AlertService from '@/shared/alert/alert.service';
+import UserService from "@/entities/user/user.service";
+import AlertService from "@/shared/alert/alert.service";
+import AccountService from "@/account/account.service";
+import TranslationService from "@/locale/translation.service";
 
 const localVue = createLocalVue();
 
@@ -21,6 +23,8 @@ config.initVueApp(localVue);
 const i18n = config.initI18N(localVue);
 const store = config.initVueXStore(localVue);
 const router = new Router();
+const translationService = new TranslationService(store, i18n);
+
 localVue.use(Router);
 localVue.use(ToastPlugin);
 localVue.component('font-awesome-icon', {});
@@ -46,7 +50,7 @@ describe('Component Tests', () => {
         provide: {
           recordService: () => recordServiceStub,
           alertService: () => new AlertService(),
-
+          accountService: () => new AccountService(store, translationService, router),
           userService: () => new UserService(),
         },
       });

@@ -36,6 +36,8 @@ spring:
       uri: mongodb://localhost:27017
       database: calculator
       auto-index-creation: true
+      username: dbuser
+      password: iGTOEzoRFhByp0Vm
   mail:
     host: localhost
     port: 25

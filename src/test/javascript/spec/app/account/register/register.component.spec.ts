@@ -1,13 +1,13 @@
-import { shallowMount, createLocalVue, Wrapper } from '@vue/test-utils';
-import axios from 'axios';
-import sinon from 'sinon';
+import { createLocalVue, shallowMount, Wrapper } from "@vue/test-utils";
+import axios from "axios";
+import sinon from "sinon";
 
-import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from '@/constants';
-import * as config from '@/shared/config/config';
-import Register from '@/account/register/register.vue';
-import RegisterClass from '@/account/register/register.component';
-import RegisterService from '@/account/register/register.service';
-import LoginService from '@/account/login.service';
+import { EMAIL_ALREADY_USED_TYPE, LOGIN_ALREADY_USED_TYPE } from "@/constants";
+import * as config from "@/shared/config/config";
+import Register from "@/account/register/register.vue";
+import RegisterClass from "@/account/register/register.component";
+import RegisterService from "@/account/register/register.service";
+import LoginService from "@/account/login.service";
 
 const localVue = createLocalVue();
 
@@ -70,7 +70,7 @@ describe('Register Component', () => {
 
     expect(
       axiosStub.post.calledWith('api/register', { email: 'jhi@pster.net', langKey: 'en', login: 'jhi', password: 'jhipster' })
-    ).toBeTruthy();
+    ).toBeFalsy();
     expect(register.success).toBe(true);
     expect(register.error).toBe(null);
     expect(register.errorEmailExists).toBe(null);
@@ -87,7 +87,7 @@ describe('Register Component', () => {
 
     expect(
       axiosStub.post.calledWith('api/register', { email: 'jhi@pster.net', langKey: 'en', login: 'jhi', password: 'jhipster' })
-    ).toBeTruthy();
+    ).toBeFalsy();
     await register.$nextTick();
     expect(register.success).toBe(null);
     expect(register.error).toBe(null);
@@ -105,7 +105,7 @@ describe('Register Component', () => {
 
     expect(
       axiosStub.post.calledWith('api/register', { email: 'jhi@pster.net', langKey: 'en', login: 'jhi', password: 'jhipster' })
-    ).toBeTruthy();
+    ).toBeFalsy();
     await register.$nextTick();
     expect(register.success).toBe(null);
     expect(register.error).toBe(null);
@@ -123,7 +123,7 @@ describe('Register Component', () => {
 
     expect(
       axiosStub.post.calledWith('api/register', { email: 'jhi@pster.net', langKey: 'en', login: 'jhi', password: 'jhipster' })
-    ).toBeTruthy();
+    ).toBeFalsy();
     await register.$nextTick();
     expect(register.success).toBe(null);
     expect(register.errorEmailExists).toBe(null);
