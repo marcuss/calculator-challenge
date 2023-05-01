@@ -3,14 +3,6 @@ package pro.marcuss.calculator.config.dbmigrations;
 import io.mongock.api.annotations.ChangeUnit;
 import io.mongock.api.annotations.Execution;
 import io.mongock.api.annotations.RollbackExecution;
-
-import java.math.BigDecimal;
-import java.time.Instant;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Random;
-import java.util.stream.Collectors;
-
 import org.springframework.data.domain.Sort;
 import org.springframework.data.mongodb.core.MongoTemplate;
 import org.springframework.data.mongodb.core.index.Index;
@@ -21,6 +13,12 @@ import pro.marcuss.calculator.domain.User;
 import pro.marcuss.calculator.domain.UserBalance;
 import pro.marcuss.calculator.domain.enumeration.Operator;
 import pro.marcuss.calculator.security.AuthoritiesConstants;
+
+import java.time.Instant;
+import java.util.Arrays;
+import java.util.List;
+import java.util.Random;
+import java.util.stream.Collectors;
 
 /**
  * Creates the initial database setup.

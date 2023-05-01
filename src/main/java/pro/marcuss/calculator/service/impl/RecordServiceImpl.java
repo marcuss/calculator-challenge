@@ -96,12 +96,6 @@ public class RecordServiceImpl implements RecordService {
                 RecordRepository.LAST_OPERATION_RESPONSE_BY_USER).get(recordDTO.getUser().getLogin()
             ).get();
         } catch (NullPointerException e) { //TODO:missing add the current form db
-            Optional<Record> lastUserRecord =  recordRepository.findFirstByUserIdOrderByDateDesc(recordDTO.getUser().getId());
-            if (lastUserRecord.isPresent()) {
-                lastOperationResponse = lastUserRecord.get().getOperationResponse();
-                cacheManager.getCache(
-                    RecordRepository.LAST_OPERATION_RESPONSE_BY_USER).put(recordDTO.getUser().getLogin(), lastOperationResponse);
-            }
         }
         recordDTO.setOperationResponse(applyOperation(lastOperationResponse, recordDTO));
         postSaveRecordWork(recordDTO, balanceDTO);

@@ -22,5 +22,4 @@ public interface RecordRepository extends MongoRepository<Record, String> {
 
     List<Record> findAllByActiveIsTrueOrderByDateDesc();
 
-    Optional<Record> findFirstByUserIdOrderByDateDesc(String userId);
 }
