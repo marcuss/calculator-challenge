@@ -63,7 +63,8 @@
           </div>
           <div class="form-group"  v-if="hasAnyAuthority('ROLE_ADMIN')" >
             <label class="form-control-label" v-text="$t('calculatorApp.record.user')" for="record-user">User </label>
-            <select class="form-control" id="record-user" data-cy="user" name="user" v-model="record.user">
+            <select class="form-control" id="record-user" data-cy="user" name="user" v-model="record.user"
+                    :class="{ valid: !$v.record.user.$invalid, invalid: $v.record.user.$invalid }">
               <option v-bind:value="null"></option>
               <option
                 v-bind:value="record.user && userOption.id === record.user.id ? record.user : userOption"
@@ -75,17 +76,25 @@
             </select>
           </div>
         </div>
-        {{ shouldDisableSaveButton($v.record.$invalid) }}
         <div>
           <button type="button" id="cancel-save" data-cy="entityCreateCancelButton" class="btn btn-secondary" v-on:click="previousState()">
             <font-awesome-icon icon="ban"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.cancel')">Cancel</span>
           </button>
-          <button
+          <button v-if="hasAnyAuthority('ROLE_ADMIN')"
             type="submit"
             id="save-entity"
             data-cy="entityCreateSaveButton"
-            :disabled="shouldDisableSaveButton($v.record.$invalid) || isSaving"
+            :disabled="shouldDisableSaveAdminButton($v.record.$invalid) || isSaving"
             class="btn btn-primary"
+          >
+            <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.save')">Save</span>
+          </button>
+          <button v-if="!hasAnyAuthority('ROLE_ADMIN')"
+                  type="submit"
+                  id="save-entity"
+                  data-cy="entityCreateSaveButton"
+                  :disabled="shouldDisableSaveRegularButton($v) || isSaving"
+                  class="btn btn-primary"
           >
             <font-awesome-icon icon="save"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.save')">Save</span>
           </button>

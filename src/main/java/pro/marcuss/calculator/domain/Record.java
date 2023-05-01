@@ -34,7 +34,6 @@ public class Record implements Serializable {
     @Field("operation")
     private Operator operation;
 
-    @NotNull
     @Field("amount")
     private Double amount;
 

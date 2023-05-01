@@ -46,17 +46,12 @@
             <span v-text="$t('calculatorApp.record.user')">User</span>
           </dt>
           <dd>
-            {{ record.user ? record.user.id : '' }}
+            {{ record.userLogin }}
           </dd>
         </dl>
         <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">
           <font-awesome-icon icon="arrow-left"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.back')"> Back</span>
         </button>
-        <router-link v-if="record.id" :to="{ name: 'RecordEdit', params: { recordId: record.id } }" custom v-slot="{ navigate }">
-          <button @click="navigate" class="btn btn-primary">
-            <font-awesome-icon icon="pencil-alt"></font-awesome-icon>&nbsp;<span v-text="$t('entity.action.edit')"> Edit</span>
-          </button>
-        </router-link>
       </div>
     </div>
   </div>

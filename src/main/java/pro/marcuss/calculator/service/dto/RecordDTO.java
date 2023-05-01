@@ -22,7 +22,6 @@ public class RecordDTO implements Serializable {
     @NotNull
     private Operator operation;
 
-    @NotNull
     private Double amount;
 
     private Double userBalance;

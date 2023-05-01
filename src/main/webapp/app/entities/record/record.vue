@@ -80,12 +80,6 @@
                     <span class="d-none d-md-inline" v-text="$t('entity.action.view')">View</span>
                   </button>
                 </router-link>
-                <router-link :to="{ name: 'RecordEdit', params: { recordId: record.id } }" custom v-slot="{ navigate }">
-                  <button @click="navigate" class="btn btn-primary btn-sm edit" data-cy="entityEditButton">
-                    <font-awesome-icon icon="pencil-alt"></font-awesome-icon>
-                    <span class="d-none d-md-inline" v-text="$t('entity.action.edit')">Edit</span>
-                  </button>
-                </router-link>
                 <b-button
                   v-on:click="prepareRemove(record)"
                   variant="danger"

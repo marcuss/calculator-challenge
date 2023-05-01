@@ -134,7 +134,11 @@ export default class Record extends Vue {
   }
 
   public roundTo(value: string, places: number){
-    return parseFloat(value).toFixed(places).padEnd(10);
+    if (!isNaN(parseFloat(value))) {
+      return parseFloat(value).toFixed(places).padEnd(10);
+    } else {
+      return value;
+    }
   }
 
   public isSQRoot() {

@@ -15,7 +15,7 @@ import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
 import pro.marcuss.calculator.service.UserBalanceService;
-import pro.marcuss.calculator.service.filters.UserBalanceFilter;
+import pro.marcuss.calculator.web.filters.UserBalanceFilter;
 import tech.jhipster.config.JHipsterProperties;
 
 import javax.servlet.ServletContext;
@@ -39,6 +39,7 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
     private final JHipsterProperties jHipsterProperties;
 
     private final UserBalanceService userBalanceService;
+
 
     public WebConfigurer(Environment env, JHipsterProperties jHipsterProperties, UserBalanceService userBalanceService) {
         this.env = env;
@@ -109,7 +110,7 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
         FilterRegistrationBean<UserBalanceFilter> registrationBean = new FilterRegistrationBean();
         UserBalanceFilter userBalanceFilter = new UserBalanceFilter(userBalanceService);
         registrationBean.setFilter(userBalanceFilter);
-        registrationBean.addUrlPatterns("/api/*"); //it only applies to api calls.
+        registrationBean.addUrlPatterns("/api/v1/records"); //it only applies to api calls for executing operations.
         return registrationBean;
     }
 }

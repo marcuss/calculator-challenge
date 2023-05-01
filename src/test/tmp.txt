@@ -1,0 +1,21 @@
+HTTP/1.1 402 Payment Required
+x-powered-by: Express
+expires: 0
+x-null-params: record
+cache-control: no-cache, no-store, max-age=0, must-revalidate
+x-xss-protection: 1; mode=block
+pragma: no-cache
+referrer-policy: strict-origin-when-cross-origin
+content-security-policy: default-src 'self'; frame-src 'self' data:; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://storage.googleapis.com; style-src 'self' https://fonts.googleapis.com 'unsafe-inline'; img-src 'self' data:; font-src 'self' https://fonts.gstatic.com data:
+date: Mon, 01 May 2023 16:57:43 GMT
+connection: close
+x-null-error: error.insufficient-funds
+x-frame-options: SAMEORIGIN
+access-control-expose-headers: Authorization, Link, X-Total-Count, X-calculatorApp-alert, X-calculatorApp-error, X-calculatorApp-params
+access-control-allow-origin: http://localhost:9000
+vary: Origin, Access-Control-Request-Method, Access-Control-Request-Headers, Accept-Encoding
+access-control-allow-credentials: true
+x-content-type-options: nosniff
+permissions-policy: camera=(), fullscreen=(self), geolocation=(), gyroscope=(), magnetometer=(), microphone=(), midi=(), payment=(), sync-xhr=()
+content-length: 72
+content-type: application/json;charset=ISO-8859-1

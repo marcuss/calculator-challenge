@@ -174,12 +174,20 @@ export default class RecordUpdate extends Vue {
     return this.hasAnyAuthorityValues[authorities] ?? false;
   }
 
-  public shouldDisableSaveButton(validationResult: boolean): boolean {
-    if (validationResult === true)  {
-      return true;
+  public shouldDisableSaveAdminButton(formIsInvalid: boolean): boolean {
+      if (formIsInvalid === false) {
+        return false;
+      } else {
+        return (this.record.operation != 'SQROOT' && this.record.operation != 'RANDOM_STRING') || this.record.user == undefined;
+      }
+  }
+
+  public shouldDisableSaveRegularButton(validation: any) {
+    if  ((this.record.operation == 'SQROOT' || this.record.operation == 'RANDOM_STRING') && this.record.operation != undefined){
+      return false;
     }
     else {
-      return this.record.operation == 'SQROOT' || this.record.operation == 'RANDOM_STRING';
+      return validation.record.amount.$invalid;
     }
   }
 }
