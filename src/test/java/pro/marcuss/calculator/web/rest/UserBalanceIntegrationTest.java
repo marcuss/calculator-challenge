@@ -2,8 +2,6 @@ package pro.marcuss.calculator.web.rest;
 
 import org.apache.commons.lang3.RandomStringUtils;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.mongodb.core.MongoTemplate;
-import pro.marcuss.calculator.config.Constants;
 import pro.marcuss.calculator.domain.Operation;
 import pro.marcuss.calculator.domain.User;
 import pro.marcuss.calculator.domain.enumeration.Operator;
@@ -21,7 +19,7 @@ import java.util.stream.Collectors;
 
 import static pro.marcuss.calculator.config.Constants.DEFAULT_INITIAL_BALANCE;
 
-public class AbstractIntegrationTest {
+public class UserBalanceIntegrationTest {
 
     @Autowired
     protected UserBalanceService userBalanceService;
@@ -32,9 +30,6 @@ public class AbstractIntegrationTest {
     @Autowired
     protected OperationRepository operationRepository;
 
-
-    @Autowired
-    private MongoTemplate template;
 
     protected void setUserBalanceForTests(String login) {
         Optional<UserBalanceDTO> userBalanceDTO = userBalanceService.findUserBalanceByUserLogin(login);

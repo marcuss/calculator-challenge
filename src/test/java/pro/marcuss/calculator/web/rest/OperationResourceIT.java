@@ -1,12 +1,5 @@
 package pro.marcuss.calculator.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import java.util.List;
-import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -21,13 +14,21 @@ import pro.marcuss.calculator.repository.OperationRepository;
 import pro.marcuss.calculator.service.dto.OperationDTO;
 import pro.marcuss.calculator.service.mapper.OperationMapper;
 
+import java.util.List;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 /**
  * Integration tests for the {@link OperationResource} REST controller.
  */
 @IntegrationTest
 @AutoConfigureMockMvc
 @WithMockUser
-class OperationResourceIT extends AbstractIntegrationTest{
+class OperationResourceIT {
 
     private static final Operator DEFAULT_OPERATOR = Operator.ADD;
     private static final Operator UPDATED_OPERATOR = Operator.SUBSTRACT;
@@ -75,7 +76,6 @@ class OperationResourceIT extends AbstractIntegrationTest{
     public void initTest() {
         operationRepository.deleteAll();
         operation = createEntity();
-        setUserBalanceForTests("user");
     }
 
     @Test

@@ -1,7 +1,6 @@
 package pro.marcuss.calculator.domain;
 
 import org.springframework.data.annotation.Id;
-import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import pro.marcuss.calculator.domain.enumeration.Operator;
@@ -48,12 +47,6 @@ public class Record implements Serializable {
     @NotNull
     @Field("date")
     private Instant date;
-
-    @DBRef
-    @Field("user")
-    private User user;
-
-    // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public String getId() {
         return this.id;
@@ -158,21 +151,6 @@ public class Record implements Serializable {
     public void setDate(Instant date) {
         this.date = date;
     }
-
-    public User getUser() {
-        return this.user;
-    }
-
-    public void setUser(User user) {
-        this.user = user;
-    }
-
-    public Record user(User user) {
-        this.setUser(user);
-        return this;
-    }
-
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {

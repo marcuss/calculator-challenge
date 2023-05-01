@@ -6,9 +6,11 @@ import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
 import org.springframework.stereotype.Service;
 import pro.marcuss.calculator.domain.Record;
+import pro.marcuss.calculator.domain.User;
 import pro.marcuss.calculator.domain.UserBalance;
 import pro.marcuss.calculator.repository.RecordRepository;
 import pro.marcuss.calculator.repository.UserBalanceRepository;
+import pro.marcuss.calculator.repository.UserRepository;
 
 import java.util.Objects;
 import java.util.Optional;
@@ -48,5 +50,12 @@ public class CacheHelperService {
 
     public void clearUserBalanceCacheFull() {
         Objects.requireNonNull(cacheManager.getCache(UserBalanceRepository.BALANCE_BY_USER_ID_LOGIN)).invalidate();
+    }
+
+    public void clearUserCaches(User user) {
+        Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_LOGIN_CACHE)).evict(user.getLogin());
+        if (user.getEmail() != null) {
+            Objects.requireNonNull(cacheManager.getCache(UserRepository.USERS_BY_EMAIL_CACHE)).evict(user.getEmail());
+        }
     }
 }

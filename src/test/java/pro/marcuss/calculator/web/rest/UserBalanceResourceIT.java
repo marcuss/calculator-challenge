@@ -1,12 +1,5 @@
 package pro.marcuss.calculator.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.hamcrest.Matchers.hasItem;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-
-import java.util.List;
-import java.util.UUID;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,13 +13,21 @@ import pro.marcuss.calculator.repository.UserBalanceRepository;
 import pro.marcuss.calculator.service.dto.UserBalanceDTO;
 import pro.marcuss.calculator.service.mapper.UserBalanceMapper;
 
+import java.util.List;
+import java.util.UUID;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.hamcrest.Matchers.hasItem;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+
 /**
  * Integration tests for the {@link UserBalanceResource} REST controller.
  */
 @IntegrationTest
 @AutoConfigureMockMvc
 @WithMockUser
-class UserBalanceResourceIT extends AbstractIntegrationTest {
+class UserBalanceResourceIT {
 
     private static final Double DEFAULT_BALANCE = 1D;
     private static final Double UPDATED_BALANCE = 2D;
@@ -74,7 +75,6 @@ class UserBalanceResourceIT extends AbstractIntegrationTest {
     public void initTest() {
         userBalanceRepository.deleteAll();
         userBalance = createEntity();
-        setUserBalanceForTests("user");
     }
 
     @Test

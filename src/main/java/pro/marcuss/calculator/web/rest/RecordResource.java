@@ -10,6 +10,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.AccessDeniedException;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
+import pro.marcuss.calculator.domain.enumeration.Operator;
 import pro.marcuss.calculator.repository.RecordRepository;
 import pro.marcuss.calculator.security.AuthoritiesConstants;
 import pro.marcuss.calculator.security.SecurityUtils;
@@ -57,17 +58,7 @@ public class RecordResource {
     @PostMapping("/records")
     public ResponseEntity<RecordDTO> createRecord(@Valid @RequestBody RecordDTO recordDTO) throws URISyntaxException {
         log.debug("REST request to save Record : {}", recordDTO);
-        if (recordDTO.getId() != null) {
-            throw new BadRequestAlertException("A new record cannot already have an ID", ENTITY_NAME, "idexists");
-        }
-        if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
-            if (recordDTO.getUser() != null) {
-                throw new AccessDeniedException("Only users with admin roles can specify the owner of an operation");
-            } else {
-                //if not an admin set the login from context
-                recordDTO.setUserLogin(SecurityUtils.getCurrentUserLogin().get());
-            }
-        }
+        validateRecordDTOFields(recordDTO);
         if (SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
             // if admin, set the login as set by admin in FE
             recordDTO.setUserLogin(recordDTO.getUser().getLogin());
@@ -78,6 +69,24 @@ public class RecordResource {
             .created(new URI("/api/v1/records/" + result.getId()))
             .headers(HeaderUtil.createEntityCreationAlert(applicationName, true, ENTITY_NAME, result.getId()))
             .body(result);
+    }
+
+    private void validateRecordDTOFields(RecordDTO recordDTO) {
+        if (recordDTO.getId() != null) {
+            throw new BadRequestAlertException("A new record cannot already have an ID", ENTITY_NAME, "idexists");
+        }
+        if (recordDTO.getAmount() == null && !recordDTO.getOperation().equals(Operator.SQROOT)
+            && !recordDTO.getOperation().equals(Operator.RANDOM_STRING)) {
+            throw new BadRequestAlertException("A new record for operation: " + recordDTO.getOperation() + " can not have a null Amount.", ENTITY_NAME, "NotNull");
+        }
+        if (!SecurityUtils.hasCurrentUserThisAuthority(AuthoritiesConstants.ADMIN)) {
+            if (recordDTO.getUser() != null) {
+                throw new AccessDeniedException("Only users with admin roles can specify the owner of an operation");
+            } else {
+                //if not an admin set the login from context
+                recordDTO.setUserLogin(SecurityUtils.getCurrentUserLogin().get());
+            }
+        }
     }
 
     /**

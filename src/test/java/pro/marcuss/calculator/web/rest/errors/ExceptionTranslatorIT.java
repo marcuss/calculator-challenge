@@ -1,15 +1,5 @@
 package pro.marcuss.calculator.web.rest.errors;
 
-import static org.mockito.ArgumentMatchers.any;
-import static org.mockito.Mockito.doReturn;
-import static org.mockito.Mockito.mock;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.content;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
-
-import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -17,7 +7,10 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import pro.marcuss.calculator.IntegrationTest;
-import pro.marcuss.calculator.web.rest.AbstractIntegrationTest;
+
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 /**
  * Integration tests {@link ExceptionTranslator} controller advice.
@@ -25,16 +18,11 @@ import pro.marcuss.calculator.web.rest.AbstractIntegrationTest;
 @WithMockUser
 @AutoConfigureMockMvc
 @IntegrationTest
-class ExceptionTranslatorIT extends AbstractIntegrationTest {
+class ExceptionTranslatorIT {
 
     @Autowired
     private MockMvc mockMvc;
 
-
-    @BeforeEach
-    public void setup() {
-        setUserBalanceForTests("user");
-    }
 
     @Test
     void testConcurrencyFailure() throws Exception {

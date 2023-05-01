@@ -1,12 +1,14 @@
 package pro.marcuss.calculator.domain;
 
-import java.io.Serializable;
-import javax.validation.constraints.*;
 import org.springframework.data.annotation.Id;
 import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
 import pro.marcuss.calculator.domain.enumeration.Operator;
+
+import javax.validation.constraints.DecimalMin;
+import javax.validation.constraints.NotNull;
+import java.io.Serializable;
 
 /**
  * A Operation.
@@ -29,8 +31,6 @@ public class Operation implements Serializable {
     @DecimalMin(value = "0")
     @Field("cost")
     private Double cost;
-
-    // jhipster-needle-entity-add-field - JHipster will add fields here
 
     public String getId() {
         return this.id;
@@ -70,8 +70,6 @@ public class Operation implements Serializable {
     public void setCost(Double cost) {
         this.cost = cost;
     }
-
-    // jhipster-needle-entity-add-getters-setters - JHipster will add getters and setters here
 
     @Override
     public boolean equals(Object o) {

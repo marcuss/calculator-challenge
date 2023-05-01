@@ -1,14 +1,6 @@
 package pro.marcuss.calculator.web.rest;
 
-import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
-import static pro.marcuss.calculator.web.rest.AccountResourceIT.TEST_USER_LOGIN;
-
-import java.time.Instant;
-import java.util.*;
 import org.apache.commons.lang3.RandomStringUtils;
-import org.junit.jupiter.api.AfterAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,7 +9,6 @@ import org.springframework.http.MediaType;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
-import org.testng.annotations.AfterTest;
 import pro.marcuss.calculator.IntegrationTest;
 import pro.marcuss.calculator.config.Constants;
 import pro.marcuss.calculator.domain.User;
@@ -30,13 +21,22 @@ import pro.marcuss.calculator.service.dto.PasswordChangeDTO;
 import pro.marcuss.calculator.web.rest.vm.KeyAndPasswordVM;
 import pro.marcuss.calculator.web.rest.vm.ManagedUserVM;
 
+import java.time.Instant;
+import java.util.*;
+
+import static org.assertj.core.api.Assertions.assertThat;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
+import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
+import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static pro.marcuss.calculator.web.rest.AccountResourceIT.TEST_USER_LOGIN;
+
 /**
  * Integration tests for the {@link AccountResource} REST controller.
  */
 @AutoConfigureMockMvc
 @WithMockUser(value = TEST_USER_LOGIN)
 @IntegrationTest
-class AccountResourceIT extends AbstractIntegrationTest {
+class AccountResourceIT {
 
     static final String TEST_USER_LOGIN = "test";
     public static final String CHANGE_PASSWORD_WRONG_EXISTING_PASSWORD = "change-password-wrong-existing-password";
@@ -111,7 +111,6 @@ class AccountResourceIT extends AbstractIntegrationTest {
         user.setLangKey("en");
         user.setAuthorities(authorities);
         userService.createUser(user);
-        setUserBalanceForTests(TEST_USER_LOGIN);
 
         restAccountMockMvc
             .perform(get("/api/v1/account").accept(MediaType.APPLICATION_JSON))
@@ -546,7 +545,6 @@ class AccountResourceIT extends AbstractIntegrationTest {
         user.setLogin("change-password-wrong-existing-password");
         user.setEmail("change-password-wrong-existing-password@example.com");
         userRepository.save(user);
-        setUserBalanceForTests(CHANGE_PASSWORD_WRONG_EXISTING_PASSWORD);
 
         restAccountMockMvc
             .perform(
@@ -570,7 +568,6 @@ class AccountResourceIT extends AbstractIntegrationTest {
         user.setLogin("change-password");
         user.setEmail("change-password@example.com");
         userRepository.save(user);
-        setUserBalanceForTests(CHANGE_PASSWORD);
 
         restAccountMockMvc
             .perform(
@@ -593,7 +590,6 @@ class AccountResourceIT extends AbstractIntegrationTest {
         user.setLogin("change-password-too-small");
         user.setEmail("change-password-too-small@example.com");
         userRepository.save(user);
-        setUserBalanceForTests(CHANGE_PASSWORD_TOO_SMALL);
 
         String newPassword = RandomStringUtils.random(ManagedUserVM.PASSWORD_MIN_LENGTH - 1);
 
@@ -618,7 +614,6 @@ class AccountResourceIT extends AbstractIntegrationTest {
         user.setLogin("change-password-too-long");
         user.setEmail("change-password-too-long@example.com");
         userRepository.save(user);
-        setUserBalanceForTests(CHANGE_PASSWORD_TOO_LONG);
 
         String newPassword = RandomStringUtils.random(ManagedUserVM.PASSWORD_MAX_LENGTH + 1);
 
@@ -643,7 +638,6 @@ class AccountResourceIT extends AbstractIntegrationTest {
         user.setLogin("change-password-empty");
         user.setEmail("change-password-empty@example.com");
         userRepository.save(user);
-        setUserBalanceForTests(CHANGE_PASSWORD_EMPTY);
 
         restAccountMockMvc
             .perform(

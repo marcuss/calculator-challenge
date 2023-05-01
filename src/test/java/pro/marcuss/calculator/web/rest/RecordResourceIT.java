@@ -31,9 +31,9 @@ import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.
 @IntegrationTest
 @AutoConfigureMockMvc
 @WithMockUser
-class RecordResourceIT extends AbstractIntegrationTest {
+class RecordResourceIT extends UserBalanceIntegrationTest {
 
-    private static final String DEFAULT_USER_LOGIN = "AAAAAAAAAA";
+    private static final String DEFAULT_USER_LOGIN = "user";
     private static final String UPDATED_USER_LOGIN = "BBBBBBBBBB";
 
     private static final Boolean DEFAULT_ACTIVE = true;

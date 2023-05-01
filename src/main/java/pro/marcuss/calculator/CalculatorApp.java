@@ -1,11 +1,5 @@
 package pro.marcuss.calculator;
 
-import java.net.InetAddress;
-import java.net.UnknownHostException;
-import java.util.Arrays;
-import java.util.Collection;
-import java.util.Optional;
-import javax.annotation.PostConstruct;
 import org.apache.commons.lang3.StringUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -17,6 +11,13 @@ import pro.marcuss.calculator.config.ApplicationProperties;
 import pro.marcuss.calculator.config.CRLFLogConverter;
 import tech.jhipster.config.DefaultProfileUtil;
 import tech.jhipster.config.JHipsterConstants;
+
+import javax.annotation.PostConstruct;
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+import java.util.Arrays;
+import java.util.Collection;
+import java.util.Optional;
 
 @SpringBootApplication
 @EnableConfigurationProperties({ ApplicationProperties.class })
@@ -35,7 +36,6 @@ public class CalculatorApp {
      * <p>
      * Spring profiles can be configured with a program argument --spring.profiles.active=your-active-profile
      * <p>
-     * You can find more information on how profiles work with JHipster on <a href="https://www.jhipster.tech/profiles/">https://www.jhipster.tech/profiles/</a>.
      */
     @PostConstruct
     public void initApplication() {

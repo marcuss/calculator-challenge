@@ -39,9 +39,8 @@ public class UserBalanceServiceImpl implements UserBalanceService {
     public UserBalanceDTO save(UserBalanceDTO userBalanceDTO) {
         log.debug("Request to save UserBalance : {}", userBalanceDTO);
         if (userBalanceDTO.getUserLogin() == null) {
-            userBalanceDTO.setUserLogin(userBalanceDTO.getUser().getLogin());
+            userBalanceDTO.setUserLogin(userBalanceDTO.getUserLogin());
         }
-
         Optional<UserBalance> existingBalance = userBalanceRepository.findUserBalanceByUserLogin(userBalanceDTO.getUserLogin());
         if (existingBalance.isPresent()) {
             existingBalance.get().setBalance(userBalanceDTO.getBalance());
