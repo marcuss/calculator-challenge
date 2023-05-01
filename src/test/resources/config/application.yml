@@ -17,6 +17,7 @@ mongock:
   migration-scan-package:
     - pro.marcuss.calculator.config.dbmigrations
   mongo-db:
+    auto-index-creation: true
     read-concern: local
     write-concern:
       journal: false

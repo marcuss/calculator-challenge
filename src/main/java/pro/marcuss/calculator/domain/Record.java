@@ -26,8 +26,8 @@ public class Record implements Serializable {
     private Boolean active;
 
     @NotNull
-    @Field("operation_id")
-    private Operator operationId;
+    @Field("operation")
+    private Operator operation;
 
     @NotNull
     @Field("amount")
@@ -77,17 +77,17 @@ public class Record implements Serializable {
         this.active = active;
     }
 
-    public Operator getOperationId() {
-        return this.operationId;
+    public Operator getOperation() {
+        return this.operation;
     }
 
-    public Record operationId(Operator operationId) {
-        this.setOperationId(operationId);
+    public Record operation(Operator operation) {
+        this.setOperation(operation);
         return this;
     }
 
-    public void setOperationId(Operator operationId) {
-        this.operationId = operationId;
+    public void setOperation(Operator operation) {
+        this.operation = operation;
     }
 
     public Double getAmount() {
@@ -180,7 +180,7 @@ public class Record implements Serializable {
         return "Record{" +
             "id=" + getId() +
             ", active='" + getActive() + "'" +
-            ", operationId='" + getOperationId() + "'" +
+            ", operation='" + getOperation() + "'" +
             ", amount=" + getAmount() +
             ", userBalance=" + getUserBalance() +
             ", operationResponse='" + getOperationResponse() + "'" +

@@ -15,6 +15,8 @@ const validations: any = {
       required,
       decimal,
     },
+    userLogin: {
+    },
   },
 };
 

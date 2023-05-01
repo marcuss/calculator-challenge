@@ -147,6 +147,7 @@ public class UserService {
         UserBalance initialBalance = new UserBalance();
         initialBalance.setBalance(Constants.DEFAULT_INITIAL_BALANCE);
         initialBalance.setUser(persistedUser);
+        initialBalance.setUserLogin(persistedUser.getLogin());
         userBalanceRepository.save(initialBalance);
     }
 

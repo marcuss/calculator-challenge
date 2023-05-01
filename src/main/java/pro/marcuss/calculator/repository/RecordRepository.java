@@ -6,6 +6,9 @@ import org.springframework.data.mongodb.repository.MongoRepository;
 import org.springframework.stereotype.Repository;
 import pro.marcuss.calculator.domain.Record;
 
+import java.util.List;
+import java.util.Optional;
+
 /**
  * Spring Data MongoDB repository for the Record entity.
  */
@@ -16,4 +19,8 @@ public interface RecordRepository extends MongoRepository<Record, String> {
     String LAST_OPERATION_RESPONSE_BY_USER = "lastOperationResponseByUser";
 
     Page<Record> findAllByActiveIsTrueOrderByDateDesc(Pageable pageable);
+
+    List<Record> findAllByActiveIsTrueOrderByDateDesc();
+
+    Optional<Record> findFirstByUserIdOrderByDateDesc(String userId);
 }

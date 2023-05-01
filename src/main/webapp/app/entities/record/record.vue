@@ -36,9 +36,9 @@
               <span v-text="$t('calculatorApp.record.user')">User</span>
               <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'user.id'"></jhi-sort-indicator>
             </th>
-            <th scope="row" v-on:click="changeOrder('operationId')">
-              <span v-text="$t('calculatorApp.record.operationId')">Operation Id</span>
-              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'operationId'"></jhi-sort-indicator>
+            <th scope="row" v-on:click="changeOrder('operation')">
+              <span v-text="$t('calculatorApp.record.operation')">Operation</span>
+              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'operation'"></jhi-sort-indicator>
             </th>
             <th scope="row" v-on:click="changeOrder('amount')">
               <span v-text="$t('calculatorApp.record.amount')">Amount</span>
@@ -66,7 +66,7 @@
             <td v-if="hasAnyAuthority('ROLE_ADMIN')">
               {{ record.user ? record.user.login : '' }}
             </td>
-            <td v-text="$t('calculatorApp.Operator.' + record.operationId)">{{ record.operationId }}</td>
+            <td v-text="$t('calculatorApp.Operator.' + record.operation)">{{ record.operation }}</td>
             <td>{{ record.amount }}</td>
             <td> = {{ roundTo(record.operationResponse,2) }}</td>
             <td> ${{ roundTo(record.userBalance,2) }}</td>

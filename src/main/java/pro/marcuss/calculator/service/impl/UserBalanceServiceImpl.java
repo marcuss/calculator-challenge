@@ -3,6 +3,8 @@ package pro.marcuss.calculator.service.impl;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.cache.CacheManager;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import pro.marcuss.calculator.domain.UserBalance;
 import pro.marcuss.calculator.repository.UserBalanceRepository;
@@ -10,11 +12,8 @@ import pro.marcuss.calculator.service.UserBalanceService;
 import pro.marcuss.calculator.service.dto.UserBalanceDTO;
 import pro.marcuss.calculator.service.mapper.UserBalanceMapper;
 
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
-import java.util.stream.Collectors;
 
 /**
  * Service Implementation for managing {@link UserBalance}.
@@ -43,7 +42,7 @@ public class UserBalanceServiceImpl implements UserBalanceService {
         log.debug("Request to save UserBalance : {}", userBalanceDTO);
         UserBalance userBalance = userBalanceMapper.toEntity(userBalanceDTO);
         userBalance = userBalanceRepository.save(userBalance);
-        updateUserCache(userBalance.getUser().getId(), userBalance);
+        updateUserCache(userBalance.getUserLogin(), userBalance);
         return userBalanceMapper.toDto(userBalance);
     }
 
@@ -69,14 +68,14 @@ public class UserBalanceServiceImpl implements UserBalanceService {
             })
             .map(userBalanceRepository::save)
             .map(userBalanceMapper::toDto);
-        clearUserCaches(updated.get().getId());
+        clearUserCaches(updated.get().getUserLogin());
         return updated;
     }
 
     @Override
-    public List<UserBalanceDTO> findAll() {
+    public Page<UserBalanceDTO> findAll(Pageable pageable) {
         log.debug("Request to get all UserBalances");
-        return userBalanceRepository.findAll().stream().map(userBalanceMapper::toDto).collect(Collectors.toCollection(LinkedList::new));
+        return userBalanceRepository.findAll(pageable).map(userBalanceMapper::toDto);
     }
 
     @Override
@@ -86,23 +85,27 @@ public class UserBalanceServiceImpl implements UserBalanceService {
     }
 
     @Override
-    public Optional<UserBalanceDTO> findUserBalanceByUserId(String id) {
-        log.debug("Request to get UserBalance by id: {}", id);
-        return userBalanceRepository.findUserBalanceByUserId(id).map(userBalanceMapper::toDto);
+    public Optional<UserBalanceDTO> findUserBalanceByUserLogin(String login) {
+        log.debug("Request to get UserBalance by login: {}", login);
+        return userBalanceRepository.findUserBalanceByUserLogin(login).map(userBalanceMapper::toDto);
     }
 
     @Override
     public void delete(String id) {
         log.debug("Request to delete UserBalance : {}", id);
         userBalanceRepository.deleteById(id);
-        clearUserCaches(id);
+        clearUserCaches();
     }
 
-    private void clearUserCaches(String id) {
-        Objects.requireNonNull(cacheManager.getCache(UserBalanceRepository.BALANCE_BY_USER_ID_CACHE)).evict(id);
+    private void clearUserCaches() {
+        Objects.requireNonNull(cacheManager.getCache(UserBalanceRepository.BALANCE_BY_USER_ID_LOGIN)).invalidate();
     }
 
-    private void updateUserCache(String id, UserBalance userBalance) {
-        Objects.requireNonNull(cacheManager.getCache(UserBalanceRepository.BALANCE_BY_USER_ID_CACHE)).put(id, Optional.of(userBalance));
+    private void clearUserCaches(String login) {
+        Objects.requireNonNull(cacheManager.getCache(UserBalanceRepository.BALANCE_BY_USER_ID_LOGIN)).evict(login);
+    }
+
+    private void updateUserCache(String login, UserBalance userBalance) {
+        Objects.requireNonNull(cacheManager.getCache(UserBalanceRepository.BALANCE_BY_USER_ID_LOGIN)).put(login, Optional.of(userBalance));
     }
 }

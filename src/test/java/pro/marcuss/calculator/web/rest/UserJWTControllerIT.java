@@ -25,7 +25,7 @@ import pro.marcuss.calculator.web.rest.vm.LoginVM;
  */
 @AutoConfigureMockMvc
 @IntegrationTest
-class UserJWTControllerIT {
+class UserJWTControllerIT extends AbstractIntegrationTest {
 
     @Autowired
     private UserRepository userRepository;
@@ -36,6 +36,9 @@ class UserJWTControllerIT {
     @Autowired
     private MockMvc mockMvc;
 
+    public void initTest() {
+        setUserBalanceForTests("user");
+    }
     @Test
     void testAuthorize() throws Exception {
         User user = new User();

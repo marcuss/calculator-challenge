@@ -27,7 +27,7 @@ import pro.marcuss.calculator.service.mapper.OperationMapper;
 @IntegrationTest
 @AutoConfigureMockMvc
 @WithMockUser
-class OperationResourceIT {
+class OperationResourceIT extends AbstractIntegrationTest{
 
     private static final Operator DEFAULT_OPERATOR = Operator.ADD;
     private static final Operator UPDATED_OPERATOR = Operator.SUBSTRACT;
@@ -75,6 +75,7 @@ class OperationResourceIT {
     public void initTest() {
         operationRepository.deleteAll();
         operation = createEntity();
+        setUserBalanceForTests("user");
     }
 
     @Test

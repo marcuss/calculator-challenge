@@ -17,7 +17,7 @@ public class RecordDTO implements Serializable {
     private Boolean active;
 
     @NotNull
-    private Operator operationId;
+    private Operator operation;
 
     @NotNull
     private Double amount;
@@ -46,12 +46,12 @@ public class RecordDTO implements Serializable {
         this.active = active;
     }
 
-    public Operator getOperationId() {
-        return operationId;
+    public Operator getOperation() {
+        return operation;
     }
 
-    public void setOperationId(Operator operationId) {
-        this.operationId = operationId;
+    public void setOperation(Operator operation) {
+        this.operation = operation;
     }
 
     public Double getAmount() {
@@ -121,7 +121,7 @@ public class RecordDTO implements Serializable {
         return "RecordDTO{" +
             "id='" + getId() + "'" +
             ", active='" + getActive() + "'" +
-            ", operationId='" + getOperationId() + "'" +
+            ", operation='" + getOperation() + "'" +
             ", amount=" + getAmount() +
             ", userBalance=" + getUserBalance() +
             ", operationResponse='" + getOperationResponse() + "'" +

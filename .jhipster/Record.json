@@ -15,7 +15,7 @@
       "fieldValidateRules": ["required"]
     },
     {
-      "fieldName": "operationId",
+      "fieldName": "operation",
       "fieldType": "Operator",
       "fieldValidateRules": ["required"],
       "fieldValues": "ADD,SUBSTRACT,MULTIPLY,DIVIDE,SQROOT,RANDOM_STRING"

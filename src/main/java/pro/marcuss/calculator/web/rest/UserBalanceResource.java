@@ -10,13 +10,19 @@ import javax.validation.constraints.NotNull;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import pro.marcuss.calculator.repository.UserBalanceRepository;
 import pro.marcuss.calculator.service.UserBalanceService;
 import pro.marcuss.calculator.service.dto.UserBalanceDTO;
 import pro.marcuss.calculator.web.rest.errors.BadRequestAlertException;
 import tech.jhipster.web.util.HeaderUtil;
+import tech.jhipster.web.util.PaginationUtil;
 import tech.jhipster.web.util.ResponseUtil;
 
 /**
@@ -135,12 +141,15 @@ public class UserBalanceResource {
     /**
      * {@code GET  /user-balances} : get all the userBalances.
      *
+     * @param pageable the pagination information.
      * @return the {@link ResponseEntity} with status {@code 200 (OK)} and the list of userBalances in body.
      */
     @GetMapping("/user-balances")
-    public List<UserBalanceDTO> getAllUserBalances() {
-        log.debug("REST request to get all UserBalances");
-        return userBalanceService.findAll();
+    public ResponseEntity<List<UserBalanceDTO>> getAllUserBalances(@org.springdoc.api.annotations.ParameterObject Pageable pageable) {
+        log.debug("REST request to get a page of UserBalances");
+        Page<UserBalanceDTO> page = userBalanceService.findAll(pageable);
+        HttpHeaders headers = PaginationUtil.generatePaginationHttpHeaders(ServletUriComponentsBuilder.fromCurrentRequest(), page);
+        return ResponseEntity.ok().headers(headers).body(page.getContent());
     }
 
     /**

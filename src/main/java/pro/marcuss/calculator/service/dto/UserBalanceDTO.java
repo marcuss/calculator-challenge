@@ -15,6 +15,9 @@ public class UserBalanceDTO implements Serializable {
     @NotNull
     private Double balance;
 
+    @NotNull
+    private String userLogin;
+
     private UserDTO user;
 
     public String getId() {
@@ -31,6 +34,14 @@ public class UserBalanceDTO implements Serializable {
 
     public void setBalance(Double balance) {
         this.balance = balance;
+    }
+
+    public String getUserLogin() {
+        return userLogin;
+    }
+
+    public void setUserLogin(String userLogin) {
+        this.userLogin = userLogin;
     }
 
     public UserDTO getUser() {
@@ -68,7 +79,7 @@ public class UserBalanceDTO implements Serializable {
         return "UserBalanceDTO{" +
             "id='" + getId() + "'" +
             ", balance=" + getBalance() +
-            ", user=" + getUser() +
+            ", userLogin='" + getUserLogin() + "'" +
             "}";
     }
 }

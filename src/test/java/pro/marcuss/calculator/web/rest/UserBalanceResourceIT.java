@@ -26,10 +26,13 @@ import pro.marcuss.calculator.service.mapper.UserBalanceMapper;
 @IntegrationTest
 @AutoConfigureMockMvc
 @WithMockUser
-class UserBalanceResourceIT {
+class UserBalanceResourceIT extends AbstractIntegrationTest {
 
     private static final Double DEFAULT_BALANCE = 1D;
     private static final Double UPDATED_BALANCE = 2D;
+
+    private static final String DEFAULT_USER_LOGIN = "AAAAAAAAAA";
+    private static final String UPDATED_USER_LOGIN = "BBBBBBBBBB";
 
     private static final String ENTITY_API_URL = "/api/v1/user-balances";
     private static final String ENTITY_API_URL_ID = ENTITY_API_URL + "/{id}";
@@ -52,7 +55,7 @@ class UserBalanceResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static UserBalance createEntity() {
-        UserBalance userBalance = new UserBalance().balance(DEFAULT_BALANCE);
+        UserBalance userBalance = new UserBalance().balance(DEFAULT_BALANCE).userLogin(DEFAULT_USER_LOGIN);
         return userBalance;
     }
 
@@ -63,7 +66,7 @@ class UserBalanceResourceIT {
      * if they test an entity which requires the current entity.
      */
     public static UserBalance createUpdatedEntity() {
-        UserBalance userBalance = new UserBalance().balance(UPDATED_BALANCE);
+        UserBalance userBalance = new UserBalance().balance(UPDATED_BALANCE).userLogin(UPDATED_USER_LOGIN);
         return userBalance;
     }
 
@@ -71,6 +74,7 @@ class UserBalanceResourceIT {
     public void initTest() {
         userBalanceRepository.deleteAll();
         userBalance = createEntity();
+        setUserBalanceForTests("user");
     }
 
     @Test
@@ -89,6 +93,7 @@ class UserBalanceResourceIT {
         assertThat(userBalanceList).hasSize(databaseSizeBeforeCreate + 1);
         UserBalance testUserBalance = userBalanceList.get(userBalanceList.size() - 1);
         assertThat(testUserBalance.getBalance()).isEqualTo(DEFAULT_BALANCE);
+        assertThat(testUserBalance.getUserLogin()).isEqualTo(DEFAULT_USER_LOGIN);
     }
 
     @Test
@@ -131,6 +136,25 @@ class UserBalanceResourceIT {
     }
 
     @Test
+    void checkUserLoginIsRequired() throws Exception {
+        int databaseSizeBeforeTest = userBalanceRepository.findAll().size();
+        // set the field null
+        userBalance.setUserLogin(null);
+
+        // Create the UserBalance, which fails.
+        UserBalanceDTO userBalanceDTO = userBalanceMapper.toDto(userBalance);
+
+        restUserBalanceMockMvc
+            .perform(
+                post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(userBalanceDTO))
+            )
+            .andExpect(status().isBadRequest());
+
+        List<UserBalance> userBalanceList = userBalanceRepository.findAll();
+        assertThat(userBalanceList).hasSize(databaseSizeBeforeTest);
+    }
+
+    @Test
     void getAllUserBalances() throws Exception {
         // Initialize the database
         userBalanceRepository.save(userBalance);
@@ -141,7 +165,8 @@ class UserBalanceResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(userBalance.getId())))
-            .andExpect(jsonPath("$.[*].balance").value(hasItem(DEFAULT_BALANCE.doubleValue())));
+            .andExpect(jsonPath("$.[*].balance").value(hasItem(DEFAULT_BALANCE.doubleValue())))
+            .andExpect(jsonPath("$.[*].userLogin").value(hasItem(DEFAULT_USER_LOGIN)));
     }
 
     @Test
@@ -155,7 +180,8 @@ class UserBalanceResourceIT {
             .andExpect(status().isOk())
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(userBalance.getId()))
-            .andExpect(jsonPath("$.balance").value(DEFAULT_BALANCE.doubleValue()));
+            .andExpect(jsonPath("$.balance").value(DEFAULT_BALANCE.doubleValue()))
+            .andExpect(jsonPath("$.userLogin").value(DEFAULT_USER_LOGIN));
     }
 
     @Test
@@ -173,7 +199,7 @@ class UserBalanceResourceIT {
 
         // Update the userBalance
         UserBalance updatedUserBalance = userBalanceRepository.findById(userBalance.getId()).get();
-        updatedUserBalance.balance(UPDATED_BALANCE);
+        updatedUserBalance.balance(UPDATED_BALANCE).userLogin(UPDATED_USER_LOGIN);
         UserBalanceDTO userBalanceDTO = userBalanceMapper.toDto(updatedUserBalance);
 
         restUserBalanceMockMvc
@@ -189,6 +215,7 @@ class UserBalanceResourceIT {
         assertThat(userBalanceList).hasSize(databaseSizeBeforeUpdate);
         UserBalance testUserBalance = userBalanceList.get(userBalanceList.size() - 1);
         assertThat(testUserBalance.getBalance()).isEqualTo(UPDATED_BALANCE);
+        assertThat(testUserBalance.getUserLogin()).isEqualTo(UPDATED_USER_LOGIN);
     }
 
     @Test
@@ -277,6 +304,7 @@ class UserBalanceResourceIT {
         assertThat(userBalanceList).hasSize(databaseSizeBeforeUpdate);
         UserBalance testUserBalance = userBalanceList.get(userBalanceList.size() - 1);
         assertThat(testUserBalance.getBalance()).isEqualTo(DEFAULT_BALANCE);
+        assertThat(testUserBalance.getUserLogin()).isEqualTo(DEFAULT_USER_LOGIN);
     }
 
     @Test
@@ -290,7 +318,7 @@ class UserBalanceResourceIT {
         UserBalance partialUpdatedUserBalance = new UserBalance();
         partialUpdatedUserBalance.setId(userBalance.getId());
 
-        partialUpdatedUserBalance.balance(UPDATED_BALANCE);
+        partialUpdatedUserBalance.balance(UPDATED_BALANCE).userLogin(UPDATED_USER_LOGIN);
 
         restUserBalanceMockMvc
             .perform(
@@ -305,6 +333,7 @@ class UserBalanceResourceIT {
         assertThat(userBalanceList).hasSize(databaseSizeBeforeUpdate);
         UserBalance testUserBalance = userBalanceList.get(userBalanceList.size() - 1);
         assertThat(testUserBalance.getBalance()).isEqualTo(UPDATED_BALANCE);
+        assertThat(testUserBalance.getUserLogin()).isEqualTo(UPDATED_USER_LOGIN);
     }
 
     @Test

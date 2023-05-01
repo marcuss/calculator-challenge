@@ -13,8 +13,8 @@ import java.util.Optional;
 @SuppressWarnings("unused")
 @Repository
 public interface UserBalanceRepository extends MongoRepository<UserBalance, String> {
-    String BALANCE_BY_USER_ID_CACHE = "balanceByUserId";
+    String BALANCE_BY_USER_ID_LOGIN = "balanceByUserLogin";
 
-    @Cacheable(cacheNames = BALANCE_BY_USER_ID_CACHE)
-    Optional<UserBalance> findUserBalanceByUserId(String id);
+    @Cacheable(cacheNames = BALANCE_BY_USER_ID_LOGIN)
+    Optional<UserBalance> findUserBalanceByUserLogin(String id);
 }

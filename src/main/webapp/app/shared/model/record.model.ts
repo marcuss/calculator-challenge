@@ -4,7 +4,7 @@ import { Operator } from '@/shared/model/enumerations/operator.model';
 export interface IRecord {
   id?: string;
   active?: boolean;
-  operationId?: Operator;
+  operation?: Operator;
   amount?: number;
   userBalance?: number;
   operationResponse?: string;
@@ -16,7 +16,7 @@ export class Record implements IRecord {
   constructor(
     public id?: string,
     public active?: boolean,
-    public operationId?: Operator,
+    public operation?: Operator,
     public amount?: number,
     public userBalance?: number,
     public operationResponse?: string,

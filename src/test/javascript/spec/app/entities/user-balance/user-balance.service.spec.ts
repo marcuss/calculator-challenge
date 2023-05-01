@@ -29,7 +29,7 @@ describe('Service Tests', () => {
 
     beforeEach(() => {
       service = new UserBalanceService();
-      elemDefault = new UserBalance('ABC', 0);
+      elemDefault = new UserBalance('ABC', 0, 'AAAAAAA');
     });
 
     describe('Service methods', () => {
@@ -82,6 +82,7 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             balance: 1,
+            userLogin: 'BBBBBB',
           },
           elemDefault
         );
@@ -109,6 +110,7 @@ describe('Service Tests', () => {
         const patchObject = Object.assign(
           {
             balance: 1,
+            userLogin: 'BBBBBB',
           },
           new UserBalance()
         );
@@ -137,12 +139,13 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             balance: 1,
+            userLogin: 'BBBBBB',
           },
           elemDefault
         );
         const expected = Object.assign({}, returnedFromService);
         axiosStub.get.resolves([returnedFromService]);
-        return service.retrieve().then(res => {
+        return service.retrieve({ sort: {}, page: 0, size: 10 }).then(res => {
           expect(res).toContainEqual(expected);
         });
       });

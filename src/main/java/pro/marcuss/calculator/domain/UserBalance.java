@@ -3,6 +3,7 @@ package pro.marcuss.calculator.domain;
 import java.io.Serializable;
 import javax.validation.constraints.*;
 import org.springframework.data.annotation.Id;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.DBRef;
 import org.springframework.data.mongodb.core.mapping.Document;
 import org.springframework.data.mongodb.core.mapping.Field;
@@ -22,6 +23,11 @@ public class UserBalance implements Serializable {
     @NotNull
     @Field("balance")
     private Double balance;
+
+    @NotNull
+    @Field("user_login")
+    @Indexed(unique = true)
+    private String userLogin;
 
     @DBRef
     @Field("user")
@@ -53,6 +59,19 @@ public class UserBalance implements Serializable {
 
     public void setBalance(Double balance) {
         this.balance = balance;
+    }
+
+    public String getUserLogin() {
+        return this.userLogin;
+    }
+
+    public UserBalance userLogin(String userLogin) {
+        this.setUserLogin(userLogin);
+        return this;
+    }
+
+    public void setUserLogin(String userLogin) {
+        this.userLogin = userLogin;
     }
 
     public User getUser() {
@@ -91,7 +110,7 @@ public class UserBalance implements Serializable {
     @Override
     public String toString() {
         return "UserBalance{" +
-            "id=" + getId() +
+            "userLogin=" + getUserLogin() +
             ", balance=" + getBalance() +
             "}";
     }

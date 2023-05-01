@@ -13,10 +13,10 @@
             <span>{{ record.active }}</span>
           </dd>
           <dt>
-            <span v-text="$t('calculatorApp.record.operationId')">Operation Id</span>
+            <span v-text="$t('calculatorApp.record.operation')">Operation</span>
           </dt>
           <dd>
-            <span v-text="$t('calculatorApp.Operator.' + record.operationId)">{{ record.operationId }}</span>
+            <span v-text="$t('calculatorApp.Operator.' + record.operation)">{{ record.operation }}</span>
           </dd>
           <dt>
             <span v-text="$t('calculatorApp.record.amount')">Amount</span>

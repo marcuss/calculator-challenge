@@ -28,9 +28,18 @@
       <table class="table table-striped" aria-describedby="userBalances">
         <thead>
           <tr>
-            <th scope="row"><span v-text="$t('global.field.id')">ID</span></th>
-            <th scope="row"><span v-text="$t('calculatorApp.userBalance.balance')">Balance</span></th>
-            <th scope="row"><span v-text="$t('calculatorApp.userBalance.user')">User</span></th>
+            <th scope="row" v-on:click="changeOrder('id')">
+              <span v-text="$t('global.field.id')">ID</span>
+              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'id'"></jhi-sort-indicator>
+            </th>
+            <th scope="row" v-on:click="changeOrder('balance')">
+              <span v-text="$t('calculatorApp.userBalance.balance')">Balance</span>
+              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'balance'"></jhi-sort-indicator>
+            </th>
+            <th scope="row" v-on:click="changeOrder('userLogin')">
+              <span v-text="$t('calculatorApp.userBalance.userLogin')">User Login</span>
+              <jhi-sort-indicator :current-order="propOrder" :reverse="reverse" :field-name="'userLogin'"></jhi-sort-indicator>
+            </th>
             <th scope="row"></th>
           </tr>
         </thead>
@@ -40,9 +49,7 @@
               <router-link :to="{ name: 'UserBalanceView', params: { userBalanceId: userBalance.id } }">{{ userBalance.id }}</router-link>
             </td>
             <td>{{ userBalance.balance }}</td>
-            <td>
-              {{ userBalance.user ? userBalance.user.id : '' }}
-            </td>
+            <td>{{ userBalance.userLogin }}</td>
             <td class="text-right">
               <div class="btn-group">
                 <router-link :to="{ name: 'UserBalanceView', params: { userBalanceId: userBalance.id } }" custom v-slot="{ navigate }">
@@ -98,6 +105,14 @@
         </button>
       </div>
     </b-modal>
+    <div v-show="userBalances && userBalances.length > 0">
+      <div class="row justify-content-center">
+        <jhi-item-count :page="page" :total="queryCount" :itemsPerPage="itemsPerPage"></jhi-item-count>
+      </div>
+      <div class="row justify-content-center">
+        <b-pagination size="md" :total-rows="totalItems" v-model="page" :per-page="itemsPerPage" :change="loadPage(page)"></b-pagination>
+      </div>
+    </div>
   </div>
 </template>
 

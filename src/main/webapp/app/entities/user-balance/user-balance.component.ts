@@ -13,6 +13,13 @@ export default class UserBalance extends Vue {
   @Inject('alertService') private alertService: () => AlertService;
 
   private removeId: string = null;
+  public itemsPerPage = 20;
+  public queryCount: number = null;
+  public page = 1;
+  public previousPage = 1;
+  public propOrder = 'id';
+  public reverse = false;
+  public totalItems = 0;
 
   public userBalances: IUserBalance[] = [];
 
@@ -23,16 +30,24 @@ export default class UserBalance extends Vue {
   }
 
   public clear(): void {
+    this.page = 1;
     this.retrieveAllUserBalances();
   }
 
   public retrieveAllUserBalances(): void {
     this.isFetching = true;
+    const paginationQuery = {
+      page: this.page - 1,
+      size: this.itemsPerPage,
+      sort: this.sort(),
+    };
     this.userBalanceService()
-      .retrieve()
+      .retrieve(paginationQuery)
       .then(
         res => {
           this.userBalances = res.data;
+          this.totalItems = Number(res.headers['x-total-count']);
+          this.queryCount = this.totalItems;
           this.isFetching = false;
         },
         err => {
@@ -72,6 +87,31 @@ export default class UserBalance extends Vue {
       .catch(error => {
         this.alertService().showHttpError(this, error.response);
       });
+  }
+
+  public sort(): Array<any> {
+    const result = [this.propOrder + ',' + (this.reverse ? 'desc' : 'asc')];
+    if (this.propOrder !== 'id') {
+      result.push('id');
+    }
+    return result;
+  }
+
+  public loadPage(page: number): void {
+    if (page !== this.previousPage) {
+      this.previousPage = page;
+      this.transition();
+    }
+  }
+
+  public transition(): void {
+    this.retrieveAllUserBalances();
+  }
+
+  public changeOrder(propOrder): void {
+    this.propOrder = propOrder;
+    this.reverse = !this.reverse;
+    this.transition();
   }
 
   public closeDialog(): void {

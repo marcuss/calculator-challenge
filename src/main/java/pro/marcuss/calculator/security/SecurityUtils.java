@@ -1,6 +1,7 @@
 package pro.marcuss.calculator.security;
 
 import java.util.Arrays;
+import java.util.List;
 import java.util.Optional;
 import java.util.stream.Stream;
 import org.springframework.security.core.Authentication;
@@ -13,6 +14,16 @@ import org.springframework.security.core.userdetails.UserDetails;
  * Utility class for Spring Security.
  */
 public final class SecurityUtils {
+
+    public final static List<String> apiUnAuthorizeEndpoints =
+        List.of(
+            "/api/v1/authenticate",
+            "/api/v1/register",
+            "/api/v1/activate",
+            "/api/v1/account",
+            "/api/v1/account/reset-password/init",
+            "/api/v1/account/reset-password/finish"
+        );
 
     private SecurityUtils() {}
 

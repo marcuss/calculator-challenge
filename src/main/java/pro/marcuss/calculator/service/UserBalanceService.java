@@ -1,7 +1,8 @@
 package pro.marcuss.calculator.service;
 
-import java.util.List;
 import java.util.Optional;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import pro.marcuss.calculator.service.dto.UserBalanceDTO;
 
 /**
@@ -35,9 +36,10 @@ public interface UserBalanceService {
     /**
      * Get all the userBalances.
      *
+     * @param pageable the pagination information.
      * @return the list of entities.
      */
-    List<UserBalanceDTO> findAll();
+    Page<UserBalanceDTO> findAll(Pageable pageable);
 
     /**
      * Get the "id" userBalance.
@@ -47,7 +49,7 @@ public interface UserBalanceService {
      */
     Optional<UserBalanceDTO> findOne(String id);
 
-    Optional<UserBalanceDTO> findUserBalanceByUserId(String login);
+    Optional<UserBalanceDTO> findUserBalanceByUserLogin(String login);
 
     /**
      * Delete the "id" userBalance.

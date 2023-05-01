@@ -98,7 +98,7 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             active: true,
-            operationId: 'BBBBBB',
+            operation: 'BBBBBB',
             amount: 1,
             userBalance: 1,
             operationResponse: 'BBBBBB',
@@ -135,7 +135,7 @@ describe('Service Tests', () => {
         const patchObject = Object.assign(
           {
             active: true,
-            operationId: 'BBBBBB',
+            operation: 'BBBBBB',
             amount: 1,
             date: dayjs(currentDate).format(DATE_TIME_FORMAT),
           },
@@ -171,7 +171,7 @@ describe('Service Tests', () => {
         const returnedFromService = Object.assign(
           {
             active: true,
-            operationId: 'BBBBBB',
+            operation: 'BBBBBB',
             amount: 1,
             userBalance: 1,
             operationResponse: 'BBBBBB',

@@ -14,7 +14,8 @@ import org.springframework.util.CollectionUtils;
 import org.springframework.web.cors.CorsConfiguration;
 import org.springframework.web.cors.UrlBasedCorsConfigurationSource;
 import org.springframework.web.filter.CorsFilter;
-import pro.marcuss.calculator.service.filters.BalanceFilter;
+import pro.marcuss.calculator.service.UserBalanceService;
+import pro.marcuss.calculator.service.filters.UserBalanceFilter;
 import tech.jhipster.config.JHipsterProperties;
 
 import javax.servlet.ServletContext;
@@ -37,9 +38,12 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
 
     private final JHipsterProperties jHipsterProperties;
 
-    public WebConfigurer(Environment env, JHipsterProperties jHipsterProperties) {
+    private final UserBalanceService userBalanceService;
+
+    public WebConfigurer(Environment env, JHipsterProperties jHipsterProperties, UserBalanceService userBalanceService) {
         this.env = env;
         this.jHipsterProperties = jHipsterProperties;
+        this.userBalanceService = userBalanceService;
     }
 
     @Override
@@ -100,14 +104,12 @@ public class WebConfigurer implements ServletContextInitializer, WebServerFactor
         return new CorsFilter(source);
     }
 
-    @Bean
-    public FilterRegistrationBean<BalanceFilter> filterRegistrationBean() {
-        FilterRegistrationBean<BalanceFilter> registrationBean = new FilterRegistrationBean();
-        BalanceFilter balanceFilter = new BalanceFilter();
-
-        registrationBean.setFilter(balanceFilter);
-        registrationBean.addUrlPatterns("/api/*");
-        registrationBean.setOrder(2); //set precedence
+   @Bean
+    public FilterRegistrationBean<UserBalanceFilter> filterRegistrationBean() {
+        FilterRegistrationBean<UserBalanceFilter> registrationBean = new FilterRegistrationBean();
+        UserBalanceFilter userBalanceFilter = new UserBalanceFilter(userBalanceService);
+        registrationBean.setFilter(userBalanceFilter);
+        registrationBean.addUrlPatterns("/api/*"); //it only applies to api calls.
         return registrationBean;
     }
 }

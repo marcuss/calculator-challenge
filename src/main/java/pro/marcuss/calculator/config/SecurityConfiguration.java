@@ -6,6 +6,7 @@ import org.springframework.http.HttpMethod;
 import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
+import org.springframework.security.config.annotation.web.configurers.ExpressionUrlAuthorizationConfigurer;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -18,6 +19,8 @@ import pro.marcuss.calculator.security.*;
 import pro.marcuss.calculator.security.jwt.*;
 import tech.jhipster.config.JHipsterProperties;
 
+import java.util.List;
+
 @EnableWebSecurity
 @EnableGlobalMethodSecurity(prePostEnabled = true, securedEnabled = true)
 @Import(SecurityProblemSupport.class)
@@ -29,6 +32,7 @@ public class SecurityConfiguration {
 
     private final CorsFilter corsFilter;
     private final SecurityProblemSupport problemSupport;
+
 
     public SecurityConfiguration(
         TokenProvider tokenProvider,
@@ -50,6 +54,7 @@ public class SecurityConfiguration {
     @Bean
     public SecurityFilterChain filterChain(HttpSecurity http) throws Exception {
         // @formatter:off
+        ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry securityConfigurer =
         http
             .csrf()
             .disable()
@@ -76,12 +81,10 @@ public class SecurityConfiguration {
             .antMatchers("/i18n/**").permitAll()
             .antMatchers("/content/**").permitAll()
             .antMatchers("/swagger-ui/**").permitAll()
-            .antMatchers("/test/**").permitAll()
-            .antMatchers("/api/v1/authenticate").permitAll()
-            .antMatchers("/api/v1/register").permitAll()
-            .antMatchers("/api/v1/activate").permitAll()
-            .antMatchers("/api/v1/account/reset-password/init").permitAll()
-            .antMatchers("/api/v1/account/reset-password/finish").permitAll()
+            .antMatchers("/test/**").permitAll();
+            //Add list of unAuthorized api endpoints
+            addListOfExceptions(securityConfigurer)
+
             .antMatchers("/api/v1/admin/**").hasAuthority(AuthoritiesConstants.ADMIN)
             .antMatchers("/api/v1/**").authenticated()
             .antMatchers("/management/health").permitAll()
@@ -99,5 +102,11 @@ public class SecurityConfiguration {
 
     private JWTConfigurer securityConfigurerAdapter() {
         return new JWTConfigurer(tokenProvider);
+    }
+
+    private ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry
+    addListOfExceptions(ExpressionUrlAuthorizationConfigurer<HttpSecurity>.ExpressionInterceptUrlRegistry configurer) {
+        SecurityUtils.apiUnAuthorizeEndpoints.forEach( path -> configurer.antMatchers(path).permitAll());
+        return configurer;
     }
 }

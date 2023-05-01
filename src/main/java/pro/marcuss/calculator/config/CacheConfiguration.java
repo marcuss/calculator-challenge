@@ -10,7 +10,6 @@ import org.springframework.boot.info.GitProperties;
 import org.springframework.cache.annotation.EnableCaching;
 import org.springframework.cache.interceptor.KeyGenerator;
 import org.springframework.context.annotation.*;
-import pro.marcuss.calculator.repository.RecordRepository;
 import tech.jhipster.config.JHipsterProperties;
 import tech.jhipster.config.cache.PrefixedKeyGenerator;
 
@@ -40,7 +39,7 @@ public class CacheConfiguration {
             createCache(cm, pro.marcuss.calculator.repository.UserRepository.USERS_BY_LOGIN_CACHE);
             createCache(cm, pro.marcuss.calculator.repository.UserRepository.USERS_BY_EMAIL_CACHE);
 
-            createCache(cm, pro.marcuss.calculator.repository.UserBalanceRepository.BALANCE_BY_USER_ID_CACHE);
+            createCache(cm, pro.marcuss.calculator.repository.UserBalanceRepository.BALANCE_BY_USER_ID_LOGIN);
             createCache(cm, pro.marcuss.calculator.repository.OperationRepository.COST_BY_OPERATOR_CACHE);
 
             createCache(cm, pro.marcuss.calculator.repository.RecordRepository.LAST_OPERATION_RESPONSE_BY_USER);

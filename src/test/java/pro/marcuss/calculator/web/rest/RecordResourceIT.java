@@ -17,6 +17,7 @@ import org.springframework.http.MediaType;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.web.servlet.MockMvc;
 import pro.marcuss.calculator.IntegrationTest;
+import pro.marcuss.calculator.config.Constants;
 import pro.marcuss.calculator.domain.Record;
 import pro.marcuss.calculator.domain.enumeration.Operator;
 import pro.marcuss.calculator.repository.RecordRepository;
@@ -29,13 +30,13 @@ import pro.marcuss.calculator.service.mapper.RecordMapper;
 @IntegrationTest
 @AutoConfigureMockMvc
 @WithMockUser
-class RecordResourceIT {
+class RecordResourceIT extends AbstractIntegrationTest {
 
     private static final Boolean DEFAULT_ACTIVE = true;
     private static final Boolean UPDATED_ACTIVE = false;
 
-    private static final Operator DEFAULT_OPERATION_ID = Operator.ADD;
-    private static final Operator UPDATED_OPERATION_ID = Operator.SUBSTRACT;
+    private static final Operator DEFAULT_OPERATION = Operator.ADD;
+    private static final Operator UPDATED_OPERATION = Operator.SUBSTRACT;
 
     private static final Double DEFAULT_AMOUNT = 1D;
     private static final Double UPDATED_AMOUNT = 2D;
@@ -72,7 +73,7 @@ class RecordResourceIT {
     public static Record createEntity() {
         Record record = new Record()
             .active(DEFAULT_ACTIVE)
-            .operationId(DEFAULT_OPERATION_ID)
+            .operation(DEFAULT_OPERATION)
             .amount(DEFAULT_AMOUNT)
             .userBalance(DEFAULT_USER_BALANCE)
             .operationResponse(DEFAULT_OPERATION_RESPONSE)
@@ -89,7 +90,7 @@ class RecordResourceIT {
     public static Record createUpdatedEntity() {
         Record record = new Record()
             .active(UPDATED_ACTIVE)
-            .operationId(UPDATED_OPERATION_ID)
+            .operation(UPDATED_OPERATION)
             .amount(UPDATED_AMOUNT)
             .userBalance(UPDATED_USER_BALANCE)
             .operationResponse(UPDATED_OPERATION_RESPONSE)
@@ -101,6 +102,10 @@ class RecordResourceIT {
     public void initTest() {
         recordRepository.deleteAll();
         record = createEntity();
+        recordRepository.deleteAll();
+        userRepository.deleteAll();
+        setUserBalanceForTests(setUserForTest("user"));
+        setOperationCosts();
     }
 
     @Test
@@ -117,11 +122,11 @@ class RecordResourceIT {
         assertThat(recordList).hasSize(databaseSizeBeforeCreate + 1);
         Record testRecord = recordList.get(recordList.size() - 1);
         assertThat(testRecord.getActive()).isEqualTo(DEFAULT_ACTIVE);
-        assertThat(testRecord.getOperationId()).isEqualTo(DEFAULT_OPERATION_ID);
+        assertThat(testRecord.getOperation()).isEqualTo(DEFAULT_OPERATION);
         assertThat(testRecord.getAmount()).isEqualTo(DEFAULT_AMOUNT);
-        assertThat(testRecord.getUserBalance()).isEqualTo(DEFAULT_USER_BALANCE);
-        assertThat(testRecord.getOperationResponse()).isEqualTo(DEFAULT_OPERATION_RESPONSE);
-        assertThat(testRecord.getDate()).isEqualTo(DEFAULT_DATE);
+        assertThat(testRecord.getUserBalance()).isLessThan(Constants.DEFAULT_INITIAL_BALANCE);//Balance was deducted
+        assertThat(testRecord.getOperationResponse()).isNotBlank();
+        assertThat(testRecord.getDate()).isAfter(Instant.now().minus(1, ChronoUnit.HOURS));
     }
 
     @Test
@@ -143,7 +148,8 @@ class RecordResourceIT {
     }
 
     @Test
-    void checkActiveIsRequired() throws Exception {
+    void checkActiveIsNotRequired() throws Exception { //the field is set to true in case is missing.
+        setUserBalanceForTests("user");
         int databaseSizeBeforeTest = recordRepository.findAll().size();
         // set the field null
         record.setActive(null);
@@ -153,17 +159,17 @@ class RecordResourceIT {
 
         restRecordMockMvc
             .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(recordDTO)))
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isCreated());
 
         List<Record> recordList = recordRepository.findAll();
-        assertThat(recordList).hasSize(databaseSizeBeforeTest);
+        assertThat(recordList).hasSize(databaseSizeBeforeTest + 1);
     }
 
     @Test
-    void checkOperationIdIsRequired() throws Exception {
+    void checkOperationIsRequired() throws Exception {
         int databaseSizeBeforeTest = recordRepository.findAll().size();
         // set the field null
-        record.setOperationId(null);
+        record.setOperation(null);
 
         // Create the Record, which fails.
         RecordDTO recordDTO = recordMapper.toDto(record);
@@ -194,7 +200,7 @@ class RecordResourceIT {
     }
 
     @Test
-    void checkUserBalanceIsRequired() throws Exception {
+    void checkUserBalanceIsNotRequired() throws Exception { //field is set to 0 or last persisted userBalance.balance for user
         int databaseSizeBeforeTest = recordRepository.findAll().size();
         // set the field null
         record.setUserBalance(null);
@@ -204,14 +210,14 @@ class RecordResourceIT {
 
         restRecordMockMvc
             .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(recordDTO)))
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isCreated());
 
         List<Record> recordList = recordRepository.findAll();
-        assertThat(recordList).hasSize(databaseSizeBeforeTest);
+        assertThat(recordList).hasSize(databaseSizeBeforeTest + 1);
     }
 
     @Test
-    void checkOperationResponseIsRequired() throws Exception {
+    void checkOperationResponseIsNotRequired() throws Exception {//field is calculated during persistence
         int databaseSizeBeforeTest = recordRepository.findAll().size();
         // set the field null
         record.setOperationResponse(null);
@@ -221,14 +227,14 @@ class RecordResourceIT {
 
         restRecordMockMvc
             .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(recordDTO)))
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isCreated());
 
         List<Record> recordList = recordRepository.findAll();
-        assertThat(recordList).hasSize(databaseSizeBeforeTest);
+        assertThat(recordList).hasSize(databaseSizeBeforeTest + 1);
     }
 
     @Test
-    void checkDateIsRequired() throws Exception {
+    void checkDateIsNotRequired() throws Exception { //field is set to now() in case is missing.
         int databaseSizeBeforeTest = recordRepository.findAll().size();
         // set the field null
         record.setDate(null);
@@ -238,10 +244,10 @@ class RecordResourceIT {
 
         restRecordMockMvc
             .perform(post(ENTITY_API_URL).contentType(MediaType.APPLICATION_JSON).content(TestUtil.convertObjectToJsonBytes(recordDTO)))
-            .andExpect(status().isBadRequest());
+            .andExpect(status().isCreated());
 
         List<Record> recordList = recordRepository.findAll();
-        assertThat(recordList).hasSize(databaseSizeBeforeTest);
+        assertThat(recordList).hasSize(databaseSizeBeforeTest + 1);
     }
 
     @Test
@@ -257,7 +263,7 @@ class RecordResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.[*].id").value(hasItem(record.getId())))
             .andExpect(jsonPath("$.[*].active").value(hasItem(DEFAULT_ACTIVE.booleanValue())))
-            .andExpect(jsonPath("$.[*].operationId").value(hasItem(DEFAULT_OPERATION_ID.toString())))
+            .andExpect(jsonPath("$.[*].operation").value(hasItem(DEFAULT_OPERATION.toString())))
             .andExpect(jsonPath("$.[*].amount").value(hasItem(DEFAULT_AMOUNT.doubleValue())))
             .andExpect(jsonPath("$.[*].userBalance").value(hasItem(DEFAULT_USER_BALANCE.doubleValue())))
             .andExpect(jsonPath("$.[*].operationResponse").value(hasItem(DEFAULT_OPERATION_RESPONSE)))
@@ -277,7 +283,7 @@ class RecordResourceIT {
             .andExpect(content().contentType(MediaType.APPLICATION_JSON_VALUE))
             .andExpect(jsonPath("$.id").value(record.getId()))
             .andExpect(jsonPath("$.active").value(DEFAULT_ACTIVE.booleanValue()))
-            .andExpect(jsonPath("$.operationId").value(DEFAULT_OPERATION_ID.toString()))
+            .andExpect(jsonPath("$.operation").value(DEFAULT_OPERATION.toString()))
             .andExpect(jsonPath("$.amount").value(DEFAULT_AMOUNT.doubleValue()))
             .andExpect(jsonPath("$.userBalance").value(DEFAULT_USER_BALANCE.doubleValue()))
             .andExpect(jsonPath("$.operationResponse").value(DEFAULT_OPERATION_RESPONSE))
@@ -302,7 +308,7 @@ class RecordResourceIT {
         Record updatedRecord = recordRepository.findById(record.getId()).get();
         updatedRecord
             .active(UPDATED_ACTIVE)
-            .operationId(UPDATED_OPERATION_ID)
+            .operation(UPDATED_OPERATION)
             .amount(UPDATED_AMOUNT)
             .userBalance(UPDATED_USER_BALANCE)
             .operationResponse(UPDATED_OPERATION_RESPONSE)
@@ -322,7 +328,7 @@ class RecordResourceIT {
         assertThat(recordList).hasSize(databaseSizeBeforeUpdate);
         Record testRecord = recordList.get(recordList.size() - 1);
         assertThat(testRecord.getActive()).isEqualTo(UPDATED_ACTIVE);
-        assertThat(testRecord.getOperationId()).isEqualTo(UPDATED_OPERATION_ID);
+        assertThat(testRecord.getOperation()).isEqualTo(UPDATED_OPERATION);
         assertThat(testRecord.getAmount()).isEqualTo(UPDATED_AMOUNT);
         assertThat(testRecord.getUserBalance()).isEqualTo(UPDATED_USER_BALANCE);
         assertThat(testRecord.getOperationResponse()).isEqualTo(UPDATED_OPERATION_RESPONSE);
@@ -396,6 +402,8 @@ class RecordResourceIT {
         // Initialize the database
         record.setId(UUID.randomUUID().toString());
         recordRepository.save(record);
+        setUserForTest("user");
+        setUserBalanceForTests("user");
 
         int databaseSizeBeforeUpdate = recordRepository.findAll().size();
 
@@ -418,7 +426,7 @@ class RecordResourceIT {
         assertThat(recordList).hasSize(databaseSizeBeforeUpdate);
         Record testRecord = recordList.get(recordList.size() - 1);
         assertThat(testRecord.getActive()).isEqualTo(DEFAULT_ACTIVE);
-        assertThat(testRecord.getOperationId()).isEqualTo(DEFAULT_OPERATION_ID);
+        assertThat(testRecord.getOperation()).isEqualTo(DEFAULT_OPERATION);
         assertThat(testRecord.getAmount()).isEqualTo(DEFAULT_AMOUNT);
         assertThat(testRecord.getUserBalance()).isEqualTo(UPDATED_USER_BALANCE);
         assertThat(testRecord.getOperationResponse()).isEqualTo(DEFAULT_OPERATION_RESPONSE);
@@ -439,7 +447,7 @@ class RecordResourceIT {
 
         partialUpdatedRecord
             .active(UPDATED_ACTIVE)
-            .operationId(UPDATED_OPERATION_ID)
+            .operation(UPDATED_OPERATION)
             .amount(UPDATED_AMOUNT)
             .userBalance(UPDATED_USER_BALANCE)
             .operationResponse(UPDATED_OPERATION_RESPONSE)
@@ -458,7 +466,7 @@ class RecordResourceIT {
         assertThat(recordList).hasSize(databaseSizeBeforeUpdate);
         Record testRecord = recordList.get(recordList.size() - 1);
         assertThat(testRecord.getActive()).isEqualTo(UPDATED_ACTIVE);
-        assertThat(testRecord.getOperationId()).isEqualTo(UPDATED_OPERATION_ID);
+        assertThat(testRecord.getOperation()).isEqualTo(UPDATED_OPERATION);
         assertThat(testRecord.getAmount()).isEqualTo(UPDATED_AMOUNT);
         assertThat(testRecord.getUserBalance()).isEqualTo(UPDATED_USER_BALANCE);
         assertThat(testRecord.getOperationResponse()).isEqualTo(UPDATED_OPERATION_RESPONSE);
@@ -530,12 +538,13 @@ class RecordResourceIT {
     }
 
     @Test
-    void deleteRecord() throws Exception {
+    void softDeleteRecordOnly() throws Exception {
         // Initialize the database
         record.setId(UUID.randomUUID().toString());
         recordRepository.save(record);
 
-        int databaseSizeBeforeDelete = recordRepository.findAll().size();
+        int recordsBeforeDelete = recordRepository.findAll().size();
+        int activeRecordsBeforeDelete = recordRepository.findAllByActiveIsTrueOrderByDateDesc().size();
 
         // Delete the record
         restRecordMockMvc
@@ -544,6 +553,9 @@ class RecordResourceIT {
 
         // Validate the database contains one less item
         List<Record> recordList = recordRepository.findAll();
-        assertThat(recordList).hasSize(databaseSizeBeforeDelete - 1);
+        activeRecordsBeforeDelete = recordRepository.findAllByActiveIsTrueOrderByDateDesc().size();
+        assertThat(recordList).hasSize(recordsBeforeDelete);
+        assertThat(recordList).hasSize(activeRecordsBeforeDelete + 1);
+
     }
 }

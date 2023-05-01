@@ -1,7 +1,7 @@
 {
   "home": {
-    "title": "¡Bienvenido, a la calculadora mas complicada!",
-    "subtitle": "Jamás vista",
+    "title": "¡Bienvenido a la calculadora mas complicada del Mundo!",
+    "subtitle": "En serio...",
     "logged": {
       "message": "Está conectado como \"{{username}}\"."
     },

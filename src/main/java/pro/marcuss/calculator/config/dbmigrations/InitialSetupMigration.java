@@ -18,6 +18,7 @@ import pro.marcuss.calculator.config.Constants;
 import pro.marcuss.calculator.domain.Authority;
 import pro.marcuss.calculator.domain.Operation;
 import pro.marcuss.calculator.domain.User;
+import pro.marcuss.calculator.domain.UserBalance;
 import pro.marcuss.calculator.domain.enumeration.Operator;
 import pro.marcuss.calculator.security.AuthoritiesConstants;
 
@@ -38,6 +39,8 @@ public class InitialSetupMigration {
         //programatically enforcing the creation fo unique indexes
         template.indexOps("operation").
             ensureIndex(new Index("operator", Sort.Direction.ASC).unique());
+        template.indexOps("userBalance").
+            ensureIndex(new Index("user_login", Sort.Direction.ASC).unique());
         Authority userAuthority = createUserAuthority();
         userAuthority = template.save(userAuthority);
         Authority adminAuthority = createAdminAuthority();
@@ -67,9 +70,19 @@ public class InitialSetupMigration {
 
     private void addUsers(Authority userAuthority, Authority adminAuthority) {
         User user = createUser(userAuthority);
-        template.save(user);
+        user = template.save(user);
+        UserBalance userBalance = new UserBalance();
+        userBalance.setUserLogin(user.getLogin());
+        userBalance.setUser(user);
+        userBalance.setBalance(Constants.DEFAULT_INITIAL_BALANCE);
+        template.save(userBalance);
         User admin = createAdmin(adminAuthority, userAuthority);
-        template.save(admin);
+        admin = template.save(admin);
+        UserBalance userBalanceAdmin = new UserBalance();
+        userBalance.setUserLogin(admin.getLogin());
+        userBalance.setUser(admin);
+        userBalance.setBalance(1_000_000d);
+        template.save(userBalance);
     }
 
     private User createUser(Authority userAuthority) {

@@ -15,14 +15,14 @@
             <input type="text" class="form-control" id="id" name="id" v-model="record.id" readonly />
           </div>
           <div class="form-group">
-            <label class="form-control-label" v-text="$t('calculatorApp.record.operationId')" for="record-operationId">Operation</label>
+            <label class="form-control-label" v-text="$t('calculatorApp.record.operation')" for="record-operation">Operation</label>
             <select
               class="form-control"
-              name="operationId"
-              :class="{ valid: !$v.record.operationId.$invalid, invalid: $v.record.operationId.$invalid }"
-              v-model="$v.record.operationId.$model"
-              id="record-operationId"
-              data-cy="operationId"
+              name="operation"
+              :class="{ valid: !$v.record.operation.$invalid, invalid: $v.record.operation.$invalid }"
+              v-model="$v.record.operation.$model"
+              id="record-operation"
+              data-cy="operation"
               required
             >
               <option
@@ -34,8 +34,8 @@
                 {{ operator }}
               </option>
             </select>
-            <div v-if="$v.record.operationId.$anyDirty && $v.record.operationId.$invalid">
-              <small class="form-text text-danger" v-if="!$v.record.operationId.required" v-text="$t('entity.validation.required')">
+            <div v-if="$v.record.operation.$anyDirty && $v.record.operation.$invalid">
+              <small class="form-text text-danger" v-if="!$v.record.operation.required" v-text="$t('entity.validation.required')">
                 This field is required.
               </small>
             </div>

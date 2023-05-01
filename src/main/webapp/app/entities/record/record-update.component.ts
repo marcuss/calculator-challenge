@@ -16,13 +16,14 @@ const validations: any = {
   record: {
     active: {
     },
-    operationId: {},
+    operation: {
+      required,
+    },
     amount: {
       required,
       decimal,
     },
     userBalance: {
-      decimal,
     },
     operationResponse: {
     },

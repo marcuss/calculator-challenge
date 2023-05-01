@@ -13,10 +13,10 @@
             <span>{{ userBalance.balance }}</span>
           </dd>
           <dt>
-            <span v-text="$t('calculatorApp.userBalance.user')">User</span>
+            <span v-text="$t('calculatorApp.userBalance.userLogin')">User Login</span>
           </dt>
           <dd>
-            {{ userBalance.user ? userBalance.user.id : '' }}
+            <span>{{ userBalance.userLogin }}</span>
           </dd>
         </dl>
         <button type="submit" v-on:click.prevent="previousState()" class="btn btn-info" data-cy="entityDetailsBackButton">

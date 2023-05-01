@@ -1,6 +1,5 @@
 package pro.marcuss.calculator.service.impl;
 
-import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.math.NumberUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -21,7 +20,6 @@ import pro.marcuss.calculator.service.dto.RecordDTO;
 import pro.marcuss.calculator.service.dto.UserBalanceDTO;
 import pro.marcuss.calculator.service.dto.UserDTO;
 import pro.marcuss.calculator.service.mapper.RecordMapper;
-import pro.marcuss.calculator.web.rest.errors.InvalidConfigurationException;
 
 import java.time.Instant;
 import java.util.Optional;
@@ -71,24 +69,24 @@ public class RecordServiceImpl implements RecordService {
                 userService.getUserWithAuthoritiesByLogin(userLogin).map(UserDTO::new).get()
             );
         }
-        Optional<OperationDTO> operationDTO = operationService.findOneByOperator(recordDTO.getOperationId());
+        Optional<OperationDTO> operationDTO = operationService.findOneByOperator(recordDTO.getOperation());
         if (operationDTO.isEmpty()) {
-            throw new InvalidConfigurationException("Operation cost not found", "operation", "invalidconfig");
+            throw new RuntimeException("Operation cost not found");
         }
 
         Optional<UserBalanceDTO> balanceDTO = Optional.empty();
 
         if (recordDTO.getUser() != null) {
             //get balance from a cacheable method
-            balanceDTO = userBalanceService.findUserBalanceByUserId(recordDTO.getUser().getId());
+            balanceDTO = userBalanceService.findUserBalanceByUserLogin(recordDTO.getUser().getLogin());
         } else {
             recordDTO.setUser(userService.getUserWithAuthoritiesByLogin(userLogin).map(UserDTO::new).get());
             //get balance from a cacheable method
-            balanceDTO = userBalanceService.findUserBalanceByUserId(recordDTO.getUser().getId());
+            balanceDTO = userBalanceService.findUserBalanceByUserLogin(recordDTO.getUser().getLogin());
         }
 
         if (balanceDTO.isEmpty()) {
-            throw new InvalidConfigurationException("Missing balance registry for User: " + userLogin, "userBalance", "invalidconfig");
+            throw new RuntimeException("Missing balance registry for User: " + userLogin);
         }
         recordDTO.setUserBalance(balanceDTO.get().getBalance() - operationDTO.get().getCost());
 
@@ -97,7 +95,13 @@ public class RecordServiceImpl implements RecordService {
             lastOperationResponse = (String) cacheManager.getCache(
                 RecordRepository.LAST_OPERATION_RESPONSE_BY_USER).get(recordDTO.getUser().getLogin()
             ).get();
-        } catch (NullPointerException e) {
+        } catch (NullPointerException e) { //TODO:missing add the current form db
+            Optional<Record> lastUserRecord =  recordRepository.findFirstByUserIdOrderByDateDesc(recordDTO.getUser().getId());
+            if (lastUserRecord.isPresent()) {
+                lastOperationResponse = lastUserRecord.get().getOperationResponse();
+                cacheManager.getCache(
+                    RecordRepository.LAST_OPERATION_RESPONSE_BY_USER).put(recordDTO.getUser().getLogin(), lastOperationResponse);
+            }
         }
         recordDTO.setOperationResponse(applyOperation(lastOperationResponse, recordDTO));
         postSaveRecordWork(recordDTO, balanceDTO);
@@ -111,7 +115,7 @@ public class RecordServiceImpl implements RecordService {
         if (NumberUtils.isCreatable(lastOperationResponse)) {
             lastResponseNumeric = Double.parseDouble(lastOperationResponse);
         }
-        switch (recordDTO.getOperationId()) {
+        switch (recordDTO.getOperation()) {
             case ADD:
                 return String.valueOf(lastResponseNumeric + recordDTO.getAmount());
             case SUBSTRACT:
