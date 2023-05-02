@@ -62,7 +62,7 @@ public class UserBalanceResource {
             throw new BadRequestAlertException("A new userBalance cannot already have an ID", ENTITY_NAME, "idexists");
         }
         if (userBalanceDTO.getUserLogin() == null) {
-            userBalanceDTO.setUserLogin(userBalanceDTO.getUserLogin());
+            userBalanceDTO.setUserLogin(userBalanceDTO.getUser().getLogin());
         }
         UserBalanceDTO result = userBalanceService.save(userBalanceDTO);
         return ResponseEntity
