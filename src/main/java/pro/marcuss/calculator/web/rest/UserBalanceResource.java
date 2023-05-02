@@ -61,7 +61,7 @@ public class UserBalanceResource {
         if (userBalanceDTO.getId() != null) {
             throw new BadRequestAlertException("A new userBalance cannot already have an ID", ENTITY_NAME, "idexists");
         }
-        if (userBalanceDTO.getUser().getLogin() == null) {
+        if (userBalanceDTO.getUser().getLogin() != null) {
             userBalanceDTO.setUserLogin(userBalanceDTO.getUser().getLogin());
         }
         UserBalanceDTO result = userBalanceService.save(userBalanceDTO);
@@ -98,7 +98,7 @@ public class UserBalanceResource {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
         
-        if (userBalanceDTO.getUser().getLogin() == null) {
+        if (userBalanceDTO.getUser().getLogin() != null) {
             userBalanceDTO.setUserLogin(userBalanceDTO.getUser().getLogin());
         }
 
