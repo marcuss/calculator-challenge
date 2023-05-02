@@ -97,6 +97,10 @@ public class UserBalanceResource {
         if (!userBalanceRepository.existsById(id)) {
             throw new BadRequestAlertException("Entity not found", ENTITY_NAME, "idnotfound");
         }
+        
+        if (userBalanceDTO.getUserLogin() == null) {
+            userBalanceDTO.setUserLogin(userBalanceDTO.getUser().getLogin());
+        }
 
         UserBalanceDTO result = userBalanceService.update(userBalanceDTO);
         return ResponseEntity
